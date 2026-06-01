@@ -2618,6 +2618,8 @@ function buildPayload() {
     acceptCommitment: document.getElementById("acceptCommitment").checked,
     acceptTerms: document.getElementById("acceptTerms").checked,
     sourceRef: new URLSearchParams(window.location.search).get("ref") || "",
+    clientDateTime: new Date().toLocaleString("sv-SE", { hour12: false }).replace("T", " "),
+    clientTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     menuLink: state.form.menuLink,
     menuNote: state.form.menuNote,
     form: {
