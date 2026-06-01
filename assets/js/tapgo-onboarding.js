@@ -2177,6 +2177,7 @@ function toggleEthernet() {
 function goToStep(step) {
   state.step = step;
   renderAll();
+  if (step === 3) resizeSignatureCanvas();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -2346,9 +2347,11 @@ function stopDrawing() {
 
 function signaturePoint(event) {
   const rect = elements.signatureCanvas.getBoundingClientRect();
+  const scaleX = elements.signatureCanvas.width / rect.width;
+  const scaleY = elements.signatureCanvas.height / rect.height;
   return {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top,
+    x: (event.clientX - rect.left) * scaleX,
+    y: (event.clientY - rect.top) * scaleY,
   };
 }
 
