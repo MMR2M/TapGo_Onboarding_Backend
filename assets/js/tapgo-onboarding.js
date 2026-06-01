@@ -2301,6 +2301,7 @@ function initSignature() {
 
 function resizeSignatureCanvas() {
   const rect = elements.signaturePad.getBoundingClientRect();
+  if (rect.width === 0) return;
   const snapshot = state.signatureData;
   elements.signatureCanvas.width = rect.width;
   elements.signatureCanvas.height = rect.height;
@@ -2352,6 +2353,7 @@ function signaturePoint(event) {
 }
 
 function markSigned() {
+  state.signatureData = elements.signatureCanvas.toDataURL("image/png");
   state.signed = true;
   elements.signaturePad.classList.add("is-signed");
   elements.signatureHint.classList.add("hidden");
