@@ -1032,10 +1032,15 @@ def generate_pdf_from_html(html_path: Path, pdf_path: Path) -> None:
                 "--headless=new",
                 "--disable-gpu",
                 "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-setuid-sandbox",
+                f"--user-data-dir=/tmp/chrome-tapgo-{os.getpid()}",
                 f"--print-to-pdf={pdf_path}",
+                "--print-to-pdf-no-header",
                 html_path.resolve().as_uri(),
             ]
-            completed = subprocess.run(command, capture_output=True, text=True)
+            chrome_env = {**os.environ, "HOME": "/tmp"}
+            completed = subprocess.run(command, capture_output=True, text=True, env=chrome_env)
             if completed.returncode == 0 and pdf_path.exists():
                 return
             errors.append(completed.stderr.strip() or "Chrome PDF generation failed.")
