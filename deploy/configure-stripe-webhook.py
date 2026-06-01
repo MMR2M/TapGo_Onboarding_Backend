@@ -58,12 +58,10 @@ def main() -> None:
     if not stripe_secret:
         raise RuntimeError("TAPGO_STRIPE_SECRET_KEY is missing.")
 
-    form_data: list[tuple[str, str]] = [("url", WEBHOOK_URL)]
-    form_data.extend(("enabled_events[]", event) for event in EVENTS)
     response = httpx.post(
         "https://api.stripe.com/v1/webhook_endpoints",
         auth=(stripe_secret, ""),
-        data=form_data,
+        data={"url": WEBHOOK_URL, "enabled_events[]": EVENTS},
         timeout=30,
     )
     response.raise_for_status()
