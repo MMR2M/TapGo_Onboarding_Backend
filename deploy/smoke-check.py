@@ -16,6 +16,8 @@ BASE_URL = "https://contract.tapgo.ch"
 
 
 def assert_ok(response: httpx.Response, label: str) -> None:
+    if not response.is_success:
+        print(response.text[:1000])
     response.raise_for_status()
     print(f"PASS {label}")
 
