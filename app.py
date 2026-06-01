@@ -762,6 +762,8 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
         "terminalCount": terminal_count,
         "recurringTotal": recurring_total,
         "oneTimeTotal": one_time_total,
+        "clientDateTime": (payload.get("clientDateTime") or "").strip(),
+        "clientTimeZone": (payload.get("clientTimeZone") or "").strip(),
     }
     return cleaned, errors
 
