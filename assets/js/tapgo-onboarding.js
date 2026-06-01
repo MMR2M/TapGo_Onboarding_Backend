@@ -2321,7 +2321,9 @@ function resizeSignatureCanvas() {
 }
 
 function startDrawing(event) {
+  event.preventDefault();
   isDrawing = true;
+  event.currentTarget.setPointerCapture(event.pointerId);
   const point = signaturePoint(event);
   signatureCtx.beginPath();
   signatureCtx.moveTo(point.x, point.y);

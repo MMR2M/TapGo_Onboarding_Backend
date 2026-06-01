@@ -986,6 +986,9 @@ a {
   width: 100%;
   height: 100%;
   display: block;
+  touch-action: none;
+  cursor: crosshair;
+  user-select: none;
 }
 
 .signature-pad__hint {
@@ -1104,8 +1107,13 @@ a {
   text-align: center;
 }
 
-.upload-dropzone input {
+.upload-dropzone input,
+#menuUpload {
   display: none;
+}
+
+.upload-dropzone {
+  cursor: pointer;
 }
 
 .upload-dropzone__icon {

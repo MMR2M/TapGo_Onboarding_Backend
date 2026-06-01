@@ -27,3 +27,7 @@ Thumbs.db
 .agents/
 .codex/
 .claude/
+
+# Docs not for deployment
+req_docs/
+*.pdf
