@@ -25,6 +25,9 @@ update_repo() {
 update_repo "$UI_DIR" "$UI_REMOTE" "$UI_SSH"
 update_repo "$BACKEND_DIR" "$BACKEND_REMOTE" "$BACKEND_SSH"
 
+find "$UI_DIR" -type d -exec chmod 755 {} +
+find "$UI_DIR" -type f -exec chmod 644 {} +
+
 "$BACKEND_DIR/.venv/bin/pip" install -r "$BACKEND_DIR/requirements.txt"
 chown -R www-data:www-data "$BACKEND_DIR/data"
 systemctl restart tapgo
