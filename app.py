@@ -38,6 +38,7 @@ DATA_DIR = BASE_DIR / "data"
 STORAGE_DIR = DATA_DIR / "storage"
 SUBMISSIONS_DIR = STORAGE_DIR / "submissions"
 OUTBOX_DIR = STORAGE_DIR / "outbox"
+CHROME_HOME_DIR = DATA_DIR / "chrome-home"
 DATABASE_PATH = DATA_DIR / "tapgo.db"
 LOGGER = logging.getLogger("tapgo")
 
@@ -478,7 +479,7 @@ def utc_now() -> str:
 
 
 def ensure_directories() -> None:
-    for path in [DATA_DIR, STORAGE_DIR, SUBMISSIONS_DIR, OUTBOX_DIR]:
+    for path in [DATA_DIR, STORAGE_DIR, SUBMISSIONS_DIR, OUTBOX_DIR, CHROME_HOME_DIR]:
         path.mkdir(parents=True, exist_ok=True)
 
 
@@ -1017,10 +1018,22 @@ def generate_pdf_from_html(html_path: Path, pdf_path: Path) -> None:
                 "--headless=new",
                 "--disable-gpu",
                 "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-crash-reporter",
+                f"--user-data-dir={html_path.parent / 'chrome-profile'}",
                 f"--print-to-pdf={pdf_path}",
                 html_path.resolve().as_uri(),
             ]
-            completed = subprocess.run(command, capture_output=True, text=True)
+            try:
+                completed = subprocess.run(
+                    command,
+                    capture_output=True,
+                    text=True,
+                    env={**os.environ, "HOME": str(CHROME_HOME_DIR)},
+                )
+            except OSError as exc:
+                errors.append(str(exc))
+                continue
             if completed.returncode == 0 and pdf_path.exists():
                 return
             errors.append(completed.stderr.strip() or "Chrome PDF generation failed.")
@@ -1028,19 +1041,23 @@ def generate_pdf_from_html(html_path: Path, pdf_path: Path) -> None:
 
         if engine == "libreoffice":
             with tempfile.TemporaryDirectory() as tmp_dir:
-                completed = subprocess.run(
-                    [
-                        "/usr/bin/libreoffice",
-                        "--headless",
-                        "--convert-to",
-                        "pdf:writer_web_pdf_Export",
-                        "--outdir",
-                        tmp_dir,
-                        str(html_path),
-                    ],
-                    capture_output=True,
-                    text=True,
-                )
+                try:
+                    completed = subprocess.run(
+                        [
+                            "/usr/bin/libreoffice",
+                            "--headless",
+                            "--convert-to",
+                            "pdf:writer_web_pdf_Export",
+                            "--outdir",
+                            tmp_dir,
+                            str(html_path),
+                        ],
+                        capture_output=True,
+                        text=True,
+                    )
+                except OSError as exc:
+                    errors.append(str(exc))
+                    continue
                 generated = Path(tmp_dir) / f"{html_path.stem}.pdf"
                 if completed.returncode == 0 and generated.exists():
                     pdf_path.write_bytes(generated.read_bytes())
