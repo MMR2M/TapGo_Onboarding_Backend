@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="{{ language_label }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ copy.bundle_title }} {{ reference }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 16mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1d1f1e;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .hero {
+      padding: 20px 22px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1d1f1e, #0c0920);
+      color: #ffffff;
+      margin-bottom: 18px;
+    }
+
+    .hero h1,
+    .section h2,
+    .section h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #be1b4c;
+    }
+
+    .provider {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border: 1px solid rgba(29, 31, 30, 0.14);
+      border-radius: 16px;
+      background: #faf9f8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid rgba(29, 31, 30, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: #ffffff;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(29, 31, 30, 0.08);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-row strong {
+      text-align: right;
+    }
+
+    .totals {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 2px solid #be1b4c;
+    }
+
+    .totals .summary-row strong {
+      color: #be1b4c;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .term {
+      padding: 12px 0;
+      border-top: 1px solid rgba(29, 31, 30, 0.1);
+    }
+
+    .term:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .term h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .signature {
+      margin-top: 22px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-end;
+    }
+
+    .signature-box {
+      flex: 1;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid rgba(29, 31, 30, 0.14);
+      border-radius: 16px;
+      background: #fcfbfb;
+    }
+
+    .signature-box img {
+      display: block;
+      max-height: 70px;
+      max-width: 100%;
+      object-fit: contain;
+      margin-top: 10px;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(190, 27, 76, 0.08);
+      color: #5e615f;
+    }
+
+    .meta {
+      margin-top: 10px;
+      color: #5e615f;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <p class="eyebrow">{{ copy.addendum_title }}</p>
+    <h1>{{ copy.bundle_title }}</h1>
+    <p>{{ reference }} · {{ generated_at }}</p>
+  </section>
+
+  <section class="provider">
+    <strong>{{ copy.provider_title }}:</strong> {{ copy.provider_value }}
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <div class="summary-row"><span>{{ copy.rows.reference }}</span><strong>{{ reference }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.language }}</span><strong>{{ language_label }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.company_name }}</span><strong>{{ form.companyName }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.company_address }}</span><strong>{{ form.companyAddress }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.restaurant_name }}</span><strong>{{ form.restaurantName }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.restaurant_address }}</span><strong>{{ form.restaurantAddress }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.contact_person }}</span><strong>{{ form.contactPerson }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.email }}</span><strong>{{ form.emailAddress }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.phone }}</span><strong>{{ form.phoneNumber or "—" }}</strong></div>
+    </article>
+
+    <article class="card">
+      <div class="summary-row"><span>{{ copy.rows.kiosk_type }}</span><strong>{{ kiosk_type }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.kiosk_count }}</span><strong>{{ kiosk_count }} × {{ pricing.kiosk }} CHF</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.pos_count }}</span><strong>{{ pos_count }} × {{ pricing.pos }} CHF</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.printer_count }}</span><strong>{{ printer_count }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.terminal_count }}</span><strong>{{ terminal_count }} × {{ pricing.terminal }} CHF</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.ethernet }}</span><strong>{{ ethernet }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.sla }}</span><strong>{{ sla }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.contract_duration }}</span><strong>{{ copy.duration }}</strong></div>
+      <div class="summary-row"><span>{{ copy.rows.start_date }}</span><strong>{{ copy.blank_date }}</strong></div>
+      <div class="totals">
+        <div class="summary-row"><span>{{ copy.rows.monthly_total }}</span><strong>{{ recurring_total }} CHF</strong></div>
+        <div class="summary-row"><span>{{ copy.rows.one_time_total }}</span><strong>{{ one_time_total }} CHF</strong></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <div class="summary-row"><span>{{ copy.rows.menu_note }}</span><strong>{{ menu_note }}</strong></div>
+    <p class="note">{{ copy.note }}</p>
+  </section>
+
+  <div class="page-break"></div>
+
+  <section class="hero">
+    <p class="eyebrow">{{ copy.agreement_title }}</p>
+    <h1>{{ copy.bundle_title }}</h1>
+    <p>{{ reference }}</p>
+  </section>
+
+  <section class="section">
+    {% for section in copy.sections %}
+      <div class="term">
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.body }}</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section class="signature">
+    <div class="signature-box">
+      <strong>{{ copy.signature.title }}</strong>
+      <div class="meta">{{ copy.signature.signed_at }} {{ signed_at }}</div>
+      <img src="{{ signature_data_url }}" alt="Signature">
+    </div>
+  </section>
+</body>
+</html>
