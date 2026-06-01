@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Configure your TapGo system, validate your contract, and submit your menu in one flow.">
+  <title>TapGo Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/tapgo-onboarding.css">
+</head>
+<body>
+  <div class="site-bg" aria-hidden="true">
+    <div class="site-bg__grid"></div>
+    <div class="site-bg__orb site-bg__orb--one"></div>
+    <div class="site-bg__orb site-bg__orb--two"></div>
+  </div>
+
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-card">
+      <p class="welcome-card__eyebrow" data-i18n="welcome.eyebrow">Tap. Order. Go.</p>
+      <h1 class="welcome-card__title" data-i18n-html="welcome.title">Choose your language, then launch your <em>TapGo onboarding</em>.</h1>
+      <p class="welcome-card__text" data-i18n="welcome.text">This self-service flow lets restaurant owners configure the hardware mix, confirm the 36-month contract, sign digitally, and submit the menu without waiting for a sales meeting.</p>
+      <div class="language-grid" id="languageGrid">
+        <button class="language-card" type="button" data-lang="en"><span class="language-card__flag">🇬🇧</span><span class="language-card__name">English</span></button>
+        <button class="language-card" type="button" data-lang="fr"><span class="language-card__flag">🇫🇷</span><span class="language-card__name">Français</span></button>
+        <button class="language-card" type="button" data-lang="de"><span class="language-card__flag">🇩🇪</span><span class="language-card__name">Deutsch</span></button>
+        <button class="language-card" type="button" data-lang="it"><span class="language-card__flag">🇮🇹</span><span class="language-card__name">Italiano</span></button>
+        <button class="language-card" type="button" data-lang="tr"><span class="language-card__flag">🇹🇷</span><span class="language-card__name">Türkçe</span></button>
+      </div>
+      <div class="welcome-card__footer">
+        <p class="welcome-card__note" data-i18n="welcome.note">Your language stays active throughout the full journey.</p>
+        <button class="btn btn-primary" id="welcomeStart" type="button" disabled data-i18n="welcome.cta">Start onboarding</button>
+      </div>
+      <p class="privacy-notice" data-i18n="welcome.privacyNotice">By proceeding, you consent to TapGo processing your personal data (company name, email, contact details) to generate and manage your onboarding contract, in accordance with Swiss LPD and GDPR. Data is not retained beyond contract management requirements.</p>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <a class="brandmark" href="https://www.tapgo.ch/" target="_blank" rel="noopener noreferrer">
+      <img class="brandmark__logo" src="/assets/images/Tapgo.png" alt="TapGo">
+    </a>
+    <div class="topbar__actions">
+      <div class="inline-languages" id="inlineLanguages"></div>
+      <div class="topbar__contact">
+        <span id="selectedLanguageLabel">🇬🇧 English</span>
+        <a href="mailto:contract@tapgo.ch">contract@tapgo.ch</a>
+        <strong id="referenceBadge">TG-0000</strong>
+      </div>
+    </div>
+  </header>
+
+  <section class="progress-shell">
+    <div class="progress-shell__head">
+      <div>
+        <p class="progress-shell__eyebrow" data-i18n="progress.eyebrow">Guided flow</p>
+        <h2 class="progress-shell__title" data-i18n="progress.title">Restaurant setup journey</h2>
+      </div>
+      <div class="progress-shell__counter" id="progressCounter">1 / 4</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-step">
+        <div class="progress-step__bullet" id="progressBullet1">1</div>
+        <div class="progress-step__label" id="progressLabel1" data-i18n="progress.steps.0">Configuration</div>
+      </div>
+      <div class="progress-track__line" id="progressLine1"></div>
+      <div class="progress-step">
+        <div class="progress-step__bullet" id="progressBullet2">2</div>
+        <div class="progress-step__label" id="progressLabel2" data-i18n="progress.steps.1">Business details</div>
+      </div>
+      <div class="progress-track__line" id="progressLine2"></div>
+      <div class="progress-step">
+        <div class="progress-step__bullet" id="progressBullet3">3</div>
+        <div class="progress-step__label" id="progressLabel3" data-i18n="progress.steps.2">Contract & signature</div>
+      </div>
+      <div class="progress-track__line" id="progressLine3"></div>
+      <div class="progress-step">
+        <div class="progress-step__bullet" id="progressBullet4">4</div>
+        <div class="progress-step__label" id="progressLabel4" data-i18n="progress.steps.3">Menu & submission</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="app-shell">
+    <section class="stage" id="submissionStage">
+      <section class="page" id="page1">
+        <div class="page-header">
+          <p class="page-header__eyebrow" data-i18n="page1.eyebrow">Step 1 of 4</p>
+          <h1 class="page-header__title" data-i18n-html="page1.title">Shape your <em>TapGo setup</em>.</h1>
+          <p class="page-header__text" data-i18n="page1.text">Keep the decisions lean: choose the kiosk style, set the quantity, and let the system calculate recurring and one-time pricing instantly.</p>
+        </div>
+
+        <div class="hero-strip">
+          <div class="hero-strip__item"><span class="hero-strip__value">36</span><span class="hero-strip__label" data-i18n="page1.stats.contract">Months of fixed commitment</span></div>
+          <div class="hero-strip__item"><span class="hero-strip__value">3</span><span class="hero-strip__label" data-i18n="page1.stats.setup">Week target for ready-to-go setup</span></div>
+          <div class="hero-strip__item"><span class="hero-strip__value">5</span><span class="hero-strip__label" data-i18n="page1.stats.languages">Supported contract languages</span></div>
+        </div>
+
+        <div class="section-label" data-i18n="page1.kioskLabel">Kiosk style</div>
+        <div class="option-grid">
+          <button class="option-card" type="button" data-kiosk-type="standing">
+            <span class="option-card__emoji">🧍</span>
+            <span class="option-card__title" data-i18n="page1.kiosks.standing.title">Standing kiosk</span>
+            <span class="option-card__text" data-i18n="page1.kiosks.standing.text">Best for heavy footfall and clear front-of-house ordering lanes.</span>
+          </button>
+          <button class="option-card" type="button" data-kiosk-type="wall">
+            <span class="option-card__emoji">🧱</span>
+            <span class="option-card__title" data-i18n="page1.kiosks.wall.title">Wall kiosk</span>
+            <span class="option-card__text" data-i18n="page1.kiosks.wall.text">Low-footprint format for tighter service areas or narrow entrances.</span>
+          </button>
+          <button class="option-card" type="button" data-kiosk-type="tabletop">
+            <span class="option-card__emoji">☕</span>
+            <span class="option-card__title" data-i18n="page1.kiosks.tabletop.title">Countertop kiosk</span>
+            <span class="option-card__text" data-i18n="page1.kiosks.tabletop.text">Compact setup for counters, cafés, and limited-width checkout zones.</span>
+          </button>
+        </div>
+
+        <div class="section-label" data-i18n="page1.equipmentLabel">Hardware and payments</div>
+        <div class="stack">
+          <div class="counter-card">
+            <div>
+              <div class="counter-card__title"><span data-i18n="page1.counters.kiosks.title">Self-order kiosks</span> <span class="pill pill--accent" data-i18n="page1.counters.kiosks.tag">Monthly</span></div>
+              <p class="counter-card__text" data-i18n="page1.counters.kiosks.text">CHF 99 per unit on the 36-month contract.</p>
+            </div>
+            <div class="counter-control">
+              <button class="counter-control__btn" id="kioskMinus" type="button">−</button>
+              <div class="counter-control__value" id="kioskCount">1</div>
+              <button class="counter-control__btn" id="kioskPlus" type="button">+</button>
+            </div>
+            <div class="counter-card__price" id="kioskPrice">99 CHF/mo</div>
+          </div>
+
+          <div class="counter-card">
+            <div>
+              <div class="counter-card__title"><span data-i18n="page1.counters.pos.title">POS system</span> <span class="pill" data-i18n="page1.counters.pos.tag">Mandatory</span></div>
+              <p class="counter-card__text" data-i18n="page1.counters.pos.text">Configurable cashier station at CHF 49 per month. At least one POS is required.</p>
+            </div>
+            <div class="counter-control">
+              <button class="counter-control__btn" id="posMinus" type="button">−</button>
+              <div class="counter-control__value" id="posCount">1</div>
+              <button class="counter-control__btn" id="posPlus" type="button">+</button>
+            </div>
+            <div class="counter-card__price" id="posPrice">49 CHF/mo</div>
+          </div>
+
+          <div class="counter-card">
+            <div>
+              <div class="counter-card__title"><span data-i18n="page1.counters.terminals.title">myPOS terminals</span> <span class="pill pill--accent" data-i18n="page1.counters.terminals.tag">One-time</span></div>
+              <p class="counter-card__text" data-i18n="page1.counters.terminals.text">Calculated automatically as kiosks + 1. Paid separately via Stripe.</p>
+            </div>
+            <div class="counter-control counter-control--fixed">
+              <div class="counter-control__value" id="terminalCount">2</div>
+            </div>
+            <div class="counter-card__price" id="terminalPrice">398 CHF</div>
+          </div>
+
+          <button class="toggle-card" id="ethernetToggle" type="button">
+            <div>
+              <div class="toggle-card__title"><span data-i18n="page1.ethernet.title">Ethernet installation</span> <span class="pill" data-i18n="page1.ethernet.tag">Optional</span></div>
+              <p class="toggle-card__text" data-i18n="page1.ethernet.text">Add the one-time on-site ethernet setup for CHF 300, or install it yourself at no extra cost.</p>
+            </div>
+            <div class="toggle-card__switch" aria-hidden="true"></div>
+            <div class="counter-card__price" id="ethernetPrice">+300 CHF</div>
+          </button>
+        </div>
+
+        <div class="section-label" data-i18n="page1.highlightsLabel">Why this setup works</div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3 data-i18n="page1.highlights.fast.title">Fast sales cycle</h3>
+            <p data-i18n="page1.highlights.fast.text">The flow is designed to be completed in minutes instead of requiring manual discovery calls.</p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="page1.highlights.scalable.title">Scalable hardware logic</h3>
+            <p data-i18n="page1.highlights.scalable.text">POS is fixed, terminals are automatic, and printers default from the selected hardware count.</p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="page1.highlights.cash.title">Clear pricing split</h3>
+            <p data-i18n="page1.highlights.cash.text">Monthly subscription and one-time Stripe items stay visibly separated from the first screen.</p>
+          </div>
+        </div>
+
+        <div class="page-actions page-actions--right">
+          <button class="btn btn-primary" id="toStep2" type="button" data-i18n="actions.continue">Continue</button>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page2">
+        <div class="page-header">
+          <p class="page-header__eyebrow" data-i18n="page2.eyebrow">Step 2 of 4</p>
+          <h1 class="page-header__title" data-i18n-html="page2.title">Add your <em>business details</em>.</h1>
+          <p class="page-header__text" data-i18n="page2.text">These fields map into the generated addendum and legal agreement, so accuracy matters here.</p>
+        </div>
+
+        <div class="section-label" data-i18n="page2.companyLabel">Company</div>
+        <div class="form-grid">
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.companyName">Company / legal name</span>
+            <input id="companyName" type="text" data-i18n-placeholder="page2.placeholders.companyName" placeholder="Example: Bouafif Partners SA">
+            <span class="field__error" id="errorCompanyName"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.companyAddress">Company address</span>
+            <input id="companyAddress" type="text" data-i18n-placeholder="page2.placeholders.companyAddress" placeholder="Street, postal code, city">
+            <span class="field__error" id="errorCompanyAddress"></span>
+          </label>
+        </div>
+
+        <div class="section-label" data-i18n="page2.restaurantLabel">Restaurant</div>
+        <div class="form-grid">
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.restaurantName">Restaurant name</span>
+            <input id="restaurantName" type="text" data-i18n-placeholder="page2.placeholders.restaurantName" placeholder="Example: TFK Restaurant">
+            <span class="field__error" id="errorRestaurantName"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.restaurantAddress">Restaurant address</span>
+            <input id="restaurantAddress" type="text" data-i18n-placeholder="page2.placeholders.restaurantAddress" placeholder="Restaurant location">
+            <span class="field__error" id="errorRestaurantAddress"></span>
+          </label>
+        </div>
+
+        <div class="section-label" data-i18n="page2.contactLabel">Contact and signature</div>
+        <div class="form-grid">
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.contactPerson">Contact person / signatory</span>
+            <input id="contactPerson" type="text" data-i18n-placeholder="page2.placeholders.contactPerson" placeholder="First and last name">
+            <span class="field__error" id="errorContactPerson"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.email">Email address</span>
+            <input id="emailAddress" type="email" data-i18n-placeholder="page2.placeholders.email" placeholder="contact@restaurant.ch">
+            <span class="field__error" id="errorEmailAddress"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.phone">Phone number</span>
+            <input id="phoneNumber" type="text" data-i18n-placeholder="page2.placeholders.phone" placeholder="+41 76 000 00 00">
+          </label>
+          <div class="field">
+            <span class="field__label" data-i18n="page2.fields.language">Contract language</span>
+            <div class="field__readonly" id="selectedLanguageReadonly">Handled from top bar</div>
+            <p class="field__hint" data-i18n="page2.languageHint">You can still switch languages from the top bar without losing your progress.</p>
+          </div>
+        </div>
+
+        <div class="section-label" data-i18n="page2.operationsLabel">Operational details</div>
+        <div class="operation-grid">
+          <div class="counter-card counter-card--compact">
+            <div>
+              <div class="counter-card__title"><span data-i18n="page2.operations.printers.title">Printer count</span> <span class="pill" data-i18n="page2.operations.printers.tag">Editable</span></div>
+              <p class="counter-card__text" data-i18n="page2.operations.printers.text">Defaults to kiosks + POS, as requested in the requirements document.</p>
+            </div>
+            <div class="counter-control">
+              <button class="counter-control__btn" id="printerMinus" type="button">−</button>
+              <div class="counter-control__value" id="printerCount">2</div>
+              <button class="counter-control__btn" id="printerPlus" type="button">+</button>
+            </div>
+          </div>
+          <div class="info-tile">
+            <h3 data-i18n="page2.operations.stripe.title">Stripe hardware payment</h3>
+            <p id="stripeInfoLine">2 myPOS terminals are prepared for the one-time Stripe payment.</p>
+          </div>
+          <div class="info-tile">
+            <h3 data-i18n="page2.operations.startDate.title">Contract start date</h3>
+            <p data-i18n="page2.operations.startDate.text">This remains blank in the generated documents and is completed on installation day.</p>
+          </div>
+        </div>
+
+        <div class="section-label" data-i18n="page2.slaLabel">Support plan</div>
+        <div class="sla-grid">
+          <button class="sla-card" type="button" data-sla="standard">
+            <div class="sla-card__head">
+              <h3 data-i18n="page2.sla.standard.title">Standard</h3>
+              <p data-i18n="page2.sla.standard.price">Included</p>
+            </div>
+            <ul class="sla-card__list">
+              <li data-i18n="page2.sla.standard.items.0">Mon-Fri support window</li>
+              <li data-i18n="page2.sla.standard.items.1">Response within 24 working hours</li>
+              <li data-i18n="page2.sla.standard.items.2">On-site visit billed separately</li>
+              <li data-i18n="page2.sla.standard.items.3">Baseline 90% availability target</li>
+            </ul>
+          </button>
+          <button class="sla-card" type="button" data-sla="premium">
+            <span class="sla-card__flag" data-i18n="page2.sla.recommended">Recommended</span>
+            <div class="sla-card__head">
+              <h3 data-i18n="page2.sla.premium.title">Premium</h3>
+              <p data-i18n="page2.sla.premium.price">+9 CHF / month</p>
+            </div>
+            <ul class="sla-card__list">
+              <li data-i18n="page2.sla.premium.items.0">7/7 extended support coverage</li>
+              <li data-i18n="page2.sla.premium.items.1">Priority remote response</li>
+              <li data-i18n="page2.sla.premium.items.2">On-site intervention included</li>
+              <li data-i18n="page2.sla.premium.items.3">Higher service availability target</li>
+            </ul>
+          </button>
+        </div>
+
+        <div class="page-actions">
+          <button class="btn btn-ghost" id="backToStep1" type="button" data-i18n="actions.back">Back</button>
+          <button class="btn btn-primary" id="toStep3" type="button" disabled data-i18n="page2.cta">Review contract</button>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page3">
+        <div class="page-header">
+          <p class="page-header__eyebrow" data-i18n="page3.eyebrow">Step 3 of 4</p>
+          <h1 class="page-header__title" data-i18n-html="page3.title">Validate the <em>agreement</em>.</h1>
+          <p class="page-header__text" data-i18n="page3.text">The commercial addendum stays in sync with your chosen configuration, while the legal terms stay aligned with the contract source you provided.</p>
+        </div>
+
+        <div class="document-actions">
+          <button class="btn btn-ghost btn--small" id="downloadContract" type="button" data-i18n="page3.download">Download contract preview</button>
+        </div>
+
+        <div class="document-stack">
+          <article class="document-card">
+            <div class="document-card__head">
+              <div>
+                <p class="document-card__eyebrow" data-i18n="page3.addendumEyebrow">Generated document</p>
+                <h2 data-i18n="page3.addendumTitle">Commercial addendum</h2>
+              </div>
+              <span class="document-card__ref" id="addendumRef">TapGo / Preview</span>
+            </div>
+            <div class="document-card__body" id="addendumRows"></div>
+          </article>
+
+          <article class="document-card">
+            <div class="document-card__head">
+              <div>
+                <p class="document-card__eyebrow" data-i18n="page3.termsEyebrow">Generated document</p>
+                <h2 data-i18n="page3.termsTitle">General conditions</h2>
+              </div>
+              <span class="document-card__ref">TapGo / Phase 1</span>
+            </div>
+            <div class="terms-list" id="contractTerms"></div>
+          </article>
+        </div>
+
+        <div class="section-label" data-i18n="page3.acceptanceLabel">Required confirmations</div>
+        <div class="checkbox-stack">
+          <label class="check-card" id="checkCardCommitment">
+            <input id="acceptCommitment" type="checkbox">
+            <span class="check-card__copy" data-i18n-html="page3.acceptCommitment">I accept the <strong>36-month commitment</strong> and understand the agreement stays non-cancellable before term except for valid cause.</span>
+          </label>
+          <label class="check-card" id="checkCardTerms">
+            <input id="acceptTerms" type="checkbox">
+            <span class="check-card__copy" data-i18n-html="page3.acceptTerms">I have read and accept the <strong>TapGo general conditions</strong>, including SLA rules, liability limits, and hardware return obligations.</span>
+          </label>
+        </div>
+
+        <div class="section-label" data-i18n="page3.signatureLabel">Electronic signature</div>
+        <div class="signature-box">
+          <div class="signature-box__meta">
+            <strong id="signatureStatus" data-i18n="page3.signaturePending">Waiting for signature</strong>
+            <button class="btn-text" id="clearSignature" type="button" data-i18n="page3.clear">Clear</button>
+          </div>
+          <div class="signature-pad" id="signaturePad">
+            <canvas id="signatureCanvas"></canvas>
+            <div class="signature-pad__hint" id="signatureHint">
+              <div class="signature-pad__icon">✍</div>
+              <div data-i18n="page3.signatureHint">Draw your signature with a mouse or finger.</div>
+            </div>
+          </div>
+          <div class="field__error field__error--block" id="signatureError"></div>
+        </div>
+
+        <div class="page-actions">
+          <button class="btn btn-ghost" id="backToStep2" type="button" data-i18n="actions.back">Back</button>
+          <button class="btn btn-primary" id="toStep4" type="button" disabled data-i18n="page3.cta">Continue to submission</button>
+        </div>
+      </section>
+
+      <section class="page hidden" id="page4">
+        <div class="page-header">
+          <p class="page-header__eyebrow" data-i18n="page4.eyebrow">Step 4 of 4</p>
+          <h1 class="page-header__title" data-i18n-html="page4.title">Send the <em>menu package</em>.</h1>
+          <p class="page-header__text" data-i18n="page4.text">Upload the working menu files for the back-office configuration team, add any notes, and finalize the onboarding package.</p>
+        </div>
+
+        <div class="upload-shell">
+          <div>
+            <label class="upload-dropzone" for="menuUpload">
+              <div class="upload-dropzone__icon">↑</div>
+              <strong data-i18n="page4.uploadTitle">Drop menu files here or choose them from your device</strong>
+              <span data-i18n="page4.uploadText">You can upload food, drinks, pricing sheets, or updated menu documents in multiple formats.</span>
+            </label>
+            <input id="menuUpload" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.docx">
+            <div class="field__error field__error--block" id="uploadError"></div>
+            <div class="upload-list" id="uploadList"></div>
+          </div>
+          <div class="upload-info">
+            <div class="upload-info__row"><span data-i18n="page4.fileRules.count">Maximum files</span><strong>10</strong></div>
+            <div class="upload-info__row"><span data-i18n="page4.fileRules.size">Maximum per file</span><strong>20 MB</strong></div>
+            <div class="upload-info__row"><span data-i18n="page4.fileRules.formats">Accepted formats</span><strong>PDF, JPG, PNG, XLSX, DOCX</strong></div>
+          </div>
+        </div>
+
+        <div class="section-label" data-i18n="page4.linkLabel">Menu link</div>
+        <label class="field">
+          <span class="field__label" data-i18n="page4.linkField">Menu URL</span>
+          <input id="menuLink" type="url" inputmode="url" data-i18n-placeholder="page4.linkPlaceholder" placeholder="https://example.com/menu.pdf">
+          <p class="field__hint" data-i18n="page4.linkHint">Use this if your menu is already shared online. A menu file or a menu link is required.</p>
+        </label>
+
+        <div class="section-label" data-i18n="page4.noteLabel">Special instructions</div>
+        <label class="field">
+          <span class="field__label" data-i18n="page4.noteField">Menu note</span>
+          <textarea id="menuNote" rows="5" data-i18n-placeholder="page4.notePlaceholder" placeholder="Add comments for the back-office team, for example separate lunch and dinner pricing, combo logic, or allergy handling."></textarea>
+        </label>
+
+        <div class="section-label" data-i18n="page4.deliveryLabel">Delivery</div>
+        <div class="delivery-grid">
+          <div class="info-tile">
+            <h3 data-i18n="page4.delivery.tapgo.title">Internal delivery</h3>
+            <p data-i18n="page4.delivery.tapgo.text">The package is prepared for delivery to contract@tapgo.ch with the signed contract, menu files, and structured onboarding summary.</p>
+          </div>
+          <div class="info-tile">
+            <h3 data-i18n="page4.delivery.customer.title">Customer confirmation</h3>
+            <p data-i18n="page4.delivery.customer.text">The selected contact email receives a confirmation message and a copy of the generated contract details in the chosen language.</p>
+          </div>
+          <div class="info-tile">
+            <h3 data-i18n="page4.delivery.phase1.title">Phase 1 scope</h3>
+            <p data-i18n="page4.delivery.phase1.text">Browser signature, local PDF generation, menu storage, and Stripe checkout creation are handled in this release.</p>
+          </div>
+        </div>
+
+        <div class="page-actions">
+          <button class="btn btn-ghost" id="backToStep3" type="button" data-i18n="actions.back">Back</button>
+          <button class="btn btn-primary" id="submitFlow" type="button" data-i18n="page4.cta">Submit onboarding package</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="stage hidden" id="successStage">
+      <div class="success-panel">
+        <div class="success-panel__icon">✓</div>
+        <div class="page-header">
+          <p class="page-header__eyebrow" data-i18n="success.eyebrow">Submission complete</p>
+          <h1 class="page-header__title" data-i18n-html="success.title">Your TapGo setup is <em>ready for handoff</em>.</h1>
+          <p class="page-header__text" id="successText">Your signed contract, company data, and menu files are prepared for delivery.</p>
+        </div>
+        <div class="success-panel__reference"><span data-i18n="success.reference">Reference</span> <strong id="successReference">TG-0000</strong></div>
+        <p class="field__hint" id="paymentStatus"></p>
+        <div class="success-panel__actions">
+          <a class="btn btn-ghost hidden" id="downloadFinalContract" href="#">Download contract</a>
+          <a class="btn btn-primary hidden" id="paymentAction" href="#">Open payment link</a>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3 data-i18n="success.steps.0.title">Hardware ordering</h3>
+            <p data-i18n="success.steps.0.text">TapGo can now prepare the myPOS hardware count and the final device allocation.</p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="success.steps.1.title">Installation planning</h3>
+            <p data-i18n="success.steps.1.text">The team can reach out to confirm the installation date and finalize the start-of-service timing.</p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="success.steps.2.title">Menu configuration</h3>
+            <p data-i18n="success.steps.2.text">Your menu files and notes are ready for back-office configuration on kiosk and POS interfaces.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="summary-panel" id="summaryPanel">
+      <div class="summary-panel__header">
+        <p class="summary-panel__eyebrow" data-i18n="summary.eyebrow">Live summary</p>
+        <h2 data-i18n="summary.title">Commercial snapshot</h2>
+        <p data-i18n="summary.text">The side panel keeps the recurring contract value and the one-time Stripe basket visible at every step.</p>
+      </div>
+
+      <div class="summary-group">
+        <div class="summary-row"><span data-i18n="summary.items.language">Language</span><strong id="summaryLanguage">🇬🇧 English</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.kioskType">Kiosk type</span><strong id="summaryKioskType">Standing kiosk</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.kiosks">Kiosk quantity</span><strong id="summaryKioskCount">1</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.pos">POS quantity</span><strong id="summaryPosCount">1</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.printers">Printers</span><strong id="summaryPrinterCount">2 printer(s)</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.terminals">myPOS terminals</span><strong id="summaryTerminalCount">2</strong></div>
+      </div>
+
+      <div class="summary-breakdown">
+        <div class="summary-line"><span id="summaryMonthlyLabel">Kiosks (1 × 99 CHF)</span><strong id="summaryMonthlyValue">99 CHF/mo</strong></div>
+        <div class="summary-line"><span id="summaryPosLabel">POS (1 × 49 CHF)</span><strong id="summaryPosValue">49 CHF/mo</strong></div>
+        <div class="summary-line"><span id="summarySlaLabel">Support plan</span><strong id="summarySlaValue">Standard (included)</strong></div>
+        <div class="summary-line"><span data-i18n="summary.oneTime">One-time Stripe basket</span><strong id="summaryOneTimeValue">398 CHF</strong></div>
+      </div>
+
+      <div class="summary-breakdown">
+        <div class="summary-line"><span data-i18n="summary.total">Recurring monthly total</span><strong id="summaryTotalValue">148 CHF/mo</strong></div>
+      </div>
+
+      <p class="summary-panel__note" id="summaryNote">Configuration follows the simplified website brief: kiosks are variable, POS is fixed, terminals are automatic.</p>
+    </aside>
+  </main>
+
+  <div class="mobile-total-bar" id="mobileTotalBar">
+    <span data-i18n="summary.total">Recurring monthly total</span>
+    <strong class="mobile-total-bar__value" id="mobileTotalValue">148 CHF/mo</strong>
+  </div>
+
+  <script src="/assets/js/tapgo-onboarding.js"></script>
+</body>
+</html>

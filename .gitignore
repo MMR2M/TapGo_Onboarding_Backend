@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+env/
+venv/
+
+# Secrets — never commit
+.env
+*.pem
+*.key
+
+# Runtime data
+data/tapgo.db
+data/storage/
+data/outbox/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Claude internals
+.agents/
+.codex/
+.claude/

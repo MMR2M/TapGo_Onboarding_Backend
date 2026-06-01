@@ -1,0 +1,20 @@
+[Unit]
+Description=TapGo Onboarding (Gunicorn)
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/tapgo-backend
+EnvironmentFile=/opt/tapgo-backend/.env
+ExecStart=/opt/tapgo-backend/.venv/bin/gunicorn -c /opt/tapgo-backend/deploy/gunicorn.conf.py app:app
+Restart=always
+RestartSec=5
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/tapgo-backend/data
+
+[Install]
+WantedBy=multi-user.target
