@@ -537,14 +537,18 @@ def init_database() -> None:
             """
         )
         columns = {row[1] for row in conn.execute("PRAGMA table_info(submissions)")}
-        if "access_token" not in columns:
-            conn.execute("ALTER TABLE submissions ADD COLUMN access_token TEXT")
-        if "tablet_count" not in columns:
-            conn.execute("ALTER TABLE submissions ADD COLUMN tablet_count INTEGER NOT NULL DEFAULT 0")
-        if "uber_eats_link" not in columns:
-            conn.execute("ALTER TABLE submissions ADD COLUMN uber_eats_link TEXT")
-        if "just_eat_link" not in columns:
-            conn.execute("ALTER TABLE submissions ADD COLUMN just_eat_link TEXT")
+        pending = [
+            ("access_token", "ALTER TABLE submissions ADD COLUMN access_token TEXT"),
+            ("tablet_count", "ALTER TABLE submissions ADD COLUMN tablet_count INTEGER NOT NULL DEFAULT 0"),
+            ("uber_eats_link", "ALTER TABLE submissions ADD COLUMN uber_eats_link TEXT"),
+            ("just_eat_link", "ALTER TABLE submissions ADD COLUMN just_eat_link TEXT"),
+        ]
+        for col, stmt in pending:
+            if col not in columns:
+                try:
+                    conn.execute(stmt)
+                except sqlite3.OperationalError:
+                    pass
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS submission_files (
@@ -563,7 +567,10 @@ def init_database() -> None:
         )
         file_columns = {row[1] for row in conn.execute("PRAGMA table_info(submission_files)")}
         if "file_category" not in file_columns:
-            conn.execute("ALTER TABLE submission_files ADD COLUMN file_category TEXT NOT NULL DEFAULT 'menu'")
+            try:
+                conn.execute("ALTER TABLE submission_files ADD COLUMN file_category TEXT NOT NULL DEFAULT 'menu'")
+            except sqlite3.OperationalError:
+                pass
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS email_logs (
