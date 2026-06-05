@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/tapgo-onboarding.css?v=5">
+  <link rel="stylesheet" href="/assets/css/tapgo-onboarding.css?v=6">
 </head>
 <body>
   <div class="site-bg" aria-hidden="true">
@@ -133,15 +133,28 @@
 
           <div class="counter-card">
             <div>
-              <div class="counter-card__title"><span data-i18n="page1.counters.pos.title">POS system</span> <span class="pill" data-i18n="page1.counters.pos.tag">Mandatory</span></div>
-              <p class="counter-card__text" data-i18n="page1.counters.pos.text">Configurable cashier station at CHF 49 per month. At least one POS is required.</p>
+              <div class="counter-card__title"><span data-i18n="page1.counters.pos.title">POS system</span> <span class="pill" data-i18n="page1.counters.pos.tag">Optional</span></div>
+              <p class="counter-card__text" data-i18n="page1.counters.pos.text">Configurable cashier station at CHF 49 per month.</p>
             </div>
             <div class="counter-control">
               <button class="counter-control__btn" id="posMinus" type="button">−</button>
-              <div class="counter-control__value" id="posCount">1</div>
+              <div class="counter-control__value" id="posCount">0</div>
               <button class="counter-control__btn" id="posPlus" type="button">+</button>
             </div>
-            <div class="counter-card__price" id="posPrice">49 CHF/mo</div>
+            <div class="counter-card__price" id="posPrice">+49 CHF/mo</div>
+          </div>
+
+          <div class="counter-card">
+            <div>
+              <div class="counter-card__title"><span data-i18n="page1.counters.tablet.title">Management tablet</span> <span class="pill pill--accent" data-i18n="page1.counters.tablet.tag">Monthly</span></div>
+              <p class="counter-card__text" data-i18n="page1.counters.tablet.text">CHF 19 per tablet per month. Required when no POS is selected.</p>
+            </div>
+            <div class="counter-control">
+              <button class="counter-control__btn" id="tabletMinus" type="button">−</button>
+              <div class="counter-control__value" id="tabletCount">1</div>
+              <button class="counter-control__btn" id="tabletPlus" type="button">+</button>
+            </div>
+            <div class="counter-card__price" id="tabletPrice">19 CHF/mo</div>
           </div>
 
           <div class="counter-card">
@@ -201,9 +214,14 @@
             <span class="field__error" id="errorCompanyName"></span>
           </label>
           <label class="field">
-            <span class="field__label" data-i18n="page2.fields.companyAddress">Company address</span>
-            <input id="companyAddress" type="text" data-i18n-placeholder="page2.placeholders.companyAddress" placeholder="Street, postal code, city">
-            <span class="field__error" id="errorCompanyAddress"></span>
+            <span class="field__label" data-i18n="page2.fields.companyStreet">Street address</span>
+            <input id="companyStreet" type="text" data-i18n-placeholder="page2.placeholders.companyStreet" placeholder="rue du Criblet 5">
+            <span class="field__error" id="errorCompanyStreet"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.companyPostalCity">Postal code &amp; city</span>
+            <input id="companyPostalCity" type="text" data-i18n-placeholder="page2.placeholders.companyPostalCity" placeholder="1700 Fribourg">
+            <span class="field__error" id="errorCompanyPostalCity"></span>
           </label>
         </div>
 
@@ -215,9 +233,14 @@
             <span class="field__error" id="errorRestaurantName"></span>
           </label>
           <label class="field">
-            <span class="field__label" data-i18n="page2.fields.restaurantAddress">Restaurant address</span>
-            <input id="restaurantAddress" type="text" data-i18n-placeholder="page2.placeholders.restaurantAddress" placeholder="Restaurant location">
-            <span class="field__error" id="errorRestaurantAddress"></span>
+            <span class="field__label" data-i18n="page2.fields.restaurantStreet">Street address</span>
+            <input id="restaurantStreet" type="text" data-i18n-placeholder="page2.placeholders.restaurantStreet" placeholder="rue du Criblet 5">
+            <span class="field__error" id="errorRestaurantStreet"></span>
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page2.fields.restaurantPostalCity">Postal code &amp; city</span>
+            <input id="restaurantPostalCity" type="text" data-i18n-placeholder="page2.placeholders.restaurantPostalCity" placeholder="1700 Fribourg">
+            <span class="field__error" id="errorRestaurantPostalCity"></span>
           </label>
         </div>
 
@@ -265,35 +288,6 @@
             <h3 data-i18n="page2.operations.startDate.title">Contract start date</h3>
             <p data-i18n="page2.operations.startDate.text">This remains blank in the generated documents and is completed on installation day.</p>
           </div>
-        </div>
-
-        <div class="section-label" data-i18n="page2.slaLabel">Support plan</div>
-        <div class="sla-grid">
-          <button class="sla-card" type="button" data-sla="standard">
-            <div class="sla-card__head">
-              <h3 data-i18n="page2.sla.standard.title">Standard</h3>
-              <p data-i18n="page2.sla.standard.price">Included</p>
-            </div>
-            <ul class="sla-card__list">
-              <li data-i18n="page2.sla.standard.items.0">Mon-Fri support window</li>
-              <li data-i18n="page2.sla.standard.items.1">Response within 24 working hours</li>
-              <li data-i18n="page2.sla.standard.items.2">On-site visit billed separately</li>
-              <li data-i18n="page2.sla.standard.items.3">Baseline 90% availability target</li>
-            </ul>
-          </button>
-          <button class="sla-card" type="button" data-sla="premium">
-            <span class="sla-card__flag" data-i18n="page2.sla.recommended">Recommended</span>
-            <div class="sla-card__head">
-              <h3 data-i18n="page2.sla.premium.title">Premium</h3>
-              <p data-i18n="page2.sla.premium.price">+9 CHF / month</p>
-            </div>
-            <ul class="sla-card__list">
-              <li data-i18n="page2.sla.premium.items.0">7/7 extended support coverage</li>
-              <li data-i18n="page2.sla.premium.items.1">Priority remote response</li>
-              <li data-i18n="page2.sla.premium.items.2">On-site intervention included</li>
-              <li data-i18n="page2.sla.premium.items.3">Higher service availability target</li>
-            </ul>
-          </button>
         </div>
 
         <div class="page-actions">
@@ -409,6 +403,37 @@
           <textarea id="menuNote" rows="5" data-i18n-placeholder="page4.notePlaceholder" placeholder="Add comments for the back-office team, for example separate lunch and dinner pricing, combo logic, or allergy handling."></textarea>
         </label>
 
+        <div class="section-label" data-i18n="page4.tradeLicenseLabel">Trade license</div>
+        <div class="upload-shell">
+          <div>
+            <label class="upload-dropzone" for="tradeLicenseUpload">
+              <div class="upload-dropzone__icon">↑</div>
+              <strong data-i18n="page4.tradeLicenseTitle">Upload your trade license</strong>
+              <span data-i18n="page4.tradeLicenseText">Upload a copy of your business trade license or company registration document.</span>
+            </label>
+            <input id="tradeLicenseUpload" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.docx">
+            <div class="field__error field__error--block" id="tradeLicenseError"></div>
+            <div class="upload-list" id="tradeLicenseList"></div>
+          </div>
+          <div class="upload-info">
+            <div class="upload-info__row"><span data-i18n="page4.fileRules.formats">Accepted formats</span><strong>PDF, JPG, PNG, DOCX</strong></div>
+            <div class="upload-info__row"><span data-i18n="page4.fileRules.size">Maximum per file</span><strong>20 MB</strong></div>
+          </div>
+        </div>
+
+        <div class="section-label" data-i18n="page4.deliveryPlatformLabel">Online delivery platforms</div>
+        <p class="field__hint" data-i18n="page4.deliveryPlatformText">If you have an active page on UberEats or JustEat, add the links below so TapGo can reference them during setup.</p>
+        <div class="form-grid">
+          <label class="field">
+            <span class="field__label" data-i18n="page4.uberEatsField">UberEats page link</span>
+            <input id="uberEatsLink" type="url" inputmode="url" data-i18n-placeholder="page4.uberEatsPlaceholder" placeholder="https://www.ubereats.com/...">
+          </label>
+          <label class="field">
+            <span class="field__label" data-i18n="page4.justEatField">JustEat page link</span>
+            <input id="justEatLink" type="url" inputmode="url" data-i18n-placeholder="page4.justEatPlaceholder" placeholder="https://www.just-eat.ch/...">
+          </label>
+        </div>
+
         <div class="section-label" data-i18n="page4.deliveryLabel">Delivery</div>
         <div class="delivery-grid">
           <div class="info-tile">
@@ -474,20 +499,22 @@
         <div class="summary-row"><span data-i18n="summary.items.language">Language</span><strong id="summaryLanguage">🇬🇧 English</strong></div>
         <div class="summary-row"><span data-i18n="summary.items.kioskType">Kiosk type</span><strong id="summaryKioskType">Standing kiosk</strong></div>
         <div class="summary-row"><span data-i18n="summary.items.kiosks">Kiosk quantity</span><strong id="summaryKioskCount">1</strong></div>
-        <div class="summary-row"><span data-i18n="summary.items.pos">POS quantity</span><strong id="summaryPosCount">1</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.pos">POS quantity</span><strong id="summaryPosCount">0</strong></div>
+        <div class="summary-row"><span data-i18n="summary.items.tablets">Tablets</span><strong id="summaryTabletCount">1</strong></div>
         <div class="summary-row"><span data-i18n="summary.items.printers">Printers</span><strong id="summaryPrinterCount">2 printer(s)</strong></div>
         <div class="summary-row"><span data-i18n="summary.items.terminals">myPOS terminals</span><strong id="summaryTerminalCount">2</strong></div>
       </div>
 
       <div class="summary-breakdown">
         <div class="summary-line"><span id="summaryMonthlyLabel">Kiosks (1 × 99 CHF)</span><strong id="summaryMonthlyValue">99 CHF/mo</strong></div>
-        <div class="summary-line"><span id="summaryPosLabel">POS (1 × 49 CHF)</span><strong id="summaryPosValue">49 CHF/mo</strong></div>
-        <div class="summary-line"><span id="summarySlaLabel">Support plan</span><strong id="summarySlaValue">Standard (included)</strong></div>
+        <div class="summary-line"><span id="summaryPosLabel">POS (0 × 49 CHF)</span><strong id="summaryPosValue">0 CHF/mo</strong></div>
+        <div class="summary-line"><span id="summaryTabletLabel">Tablets (1 × 19 CHF)</span><strong id="summaryTabletValue">19 CHF/mo</strong></div>
+        <div class="summary-line hidden" id="summarySlaLine"><span id="summarySlaLabel">Support plan</span><strong id="summarySlaValue">Standard (included)</strong></div>
         <div class="summary-line"><span data-i18n="summary.oneTime">One-time Stripe basket</span><strong id="summaryOneTimeValue">398 CHF</strong></div>
       </div>
 
       <div class="summary-breakdown">
-        <div class="summary-line"><span data-i18n="summary.total">Recurring monthly total</span><strong id="summaryTotalValue">148 CHF/mo</strong></div>
+        <div class="summary-line"><span data-i18n="summary.total">Recurring monthly total</span><strong id="summaryTotalValue">118 CHF/mo</strong></div>
       </div>
 
       <p class="summary-panel__note" id="summaryNote">Configuration follows the simplified website brief: kiosks are variable, POS is fixed, terminals are automatic.</p>
@@ -496,9 +523,9 @@
 
   <div class="mobile-total-bar" id="mobileTotalBar">
     <span data-i18n="summary.total">Recurring monthly total</span>
-    <strong class="mobile-total-bar__value" id="mobileTotalValue">148 CHF/mo</strong>
+    <strong class="mobile-total-bar__value" id="mobileTotalValue">118 CHF/mo</strong>
   </div>
 
-  <script src="/assets/js/tapgo-onboarding.js?v=5"></script>
+  <script src="/assets/js/tapgo-onboarding.js?v=6"></script>
 </body>
 </html>

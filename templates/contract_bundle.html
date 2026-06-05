@@ -193,11 +193,11 @@
     <article class="card">
       <div class="summary-row"><span>{{ copy.rows.kiosk_type }}</span><strong>{{ kiosk_type }}</strong></div>
       <div class="summary-row"><span>{{ copy.rows.kiosk_count }}</span><strong>{{ kiosk_count }} × {{ pricing.kiosk }} CHF</strong></div>
-      <div class="summary-row"><span>{{ copy.rows.pos_count }}</span><strong>{{ pos_count }} × {{ pricing.pos }} CHF</strong></div>
+      {% if pos_count > 0 %}<div class="summary-row"><span>{{ copy.rows.pos_count }}</span><strong>{{ pos_count }} × {{ pricing.pos }} CHF</strong></div>{% endif %}
+      {% if tablet_count > 0 %}<div class="summary-row"><span>{{ copy.rows.tablet_count }}</span><strong>{{ tablet_count }} × {{ pricing.tablet }} CHF</strong></div>{% endif %}
       <div class="summary-row"><span>{{ copy.rows.printer_count }}</span><strong>{{ printer_count }}</strong></div>
       <div class="summary-row"><span>{{ copy.rows.terminal_count }}</span><strong>{{ terminal_count }} × {{ pricing.terminal }} CHF</strong></div>
       <div class="summary-row"><span>{{ copy.rows.ethernet }}</span><strong>{{ ethernet }}</strong></div>
-      <div class="summary-row"><span>{{ copy.rows.sla }}</span><strong>{{ sla }}</strong></div>
       <div class="summary-row"><span>{{ copy.rows.contract_duration }}</span><strong>{{ copy.duration }}</strong></div>
       <div class="summary-row"><span>{{ copy.rows.start_date }}</span><strong>{{ copy.blank_date }}</strong></div>
       <div class="totals">

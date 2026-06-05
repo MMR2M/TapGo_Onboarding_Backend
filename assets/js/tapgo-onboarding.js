@@ -1,6 +1,8 @@
 const PRICING = {
   kiosk: 99,
   pos: 49,
+  tablet: 19,
+  printer: 99,
   slaPremium: 9,
   terminal: 199,
   ethernet: 300,
@@ -70,8 +72,13 @@ const COPY = {
         },
         pos: {
           title: "POS system",
-          tag: "Mandatory",
-          text: "Configurable cashier station at CHF 49 per month. At least one POS is required.",
+          tag: "Optional",
+          text: "Configurable cashier station at CHF 49 per month.",
+        },
+        tablet: {
+          title: "Management tablet",
+          tag: "Monthly",
+          text: "CHF 19 per tablet per month. Required when no POS is selected.",
         },
         terminals: {
           title: "myPOS terminals",
@@ -92,7 +99,7 @@ const COPY = {
         },
         scalable: {
           title: "Scalable hardware logic",
-          text: "POS is fixed, terminals are automatic, and printers default from the selected hardware count.",
+          text: "Terminals are automatic; 2 printers included per kiosk setup. Extra printers at 99 CHF/mo.",
         },
         cash: {
           title: "Clear pricing split",
@@ -111,9 +118,11 @@ const COPY = {
       slaLabel: "Support plan",
       fields: {
         companyName: "Company / legal name",
-        companyAddress: "Company address",
+        companyStreet: "Street address",
+        companyPostalCity: "Postal code & city",
         restaurantName: "Restaurant name",
-        restaurantAddress: "Restaurant address",
+        restaurantStreet: "Street address",
+        restaurantPostalCity: "Postal code & city",
         contactPerson: "Contact person / signatory",
         email: "Email address",
         phone: "Phone number",
@@ -121,9 +130,11 @@ const COPY = {
       },
       placeholders: {
         companyName: "Example: Bouafif Partners SA",
-        companyAddress: "Street, postal code, city",
+        companyStreet: "rue du Criblet 5",
+        companyPostalCity: "1700 Fribourg",
         restaurantName: "Example: TFK Restaurant",
-        restaurantAddress: "Restaurant location",
+        restaurantStreet: "rue du Criblet 5",
+        restaurantPostalCity: "1700 Fribourg",
         contactPerson: "First and last name",
         email: "contact@restaurant.ch",
         phone: "+41 76 000 00 00",
@@ -133,7 +144,7 @@ const COPY = {
         printers: {
           title: "Printer count",
           tag: "Editable",
-          text: "Defaults to kiosks + POS, as requested in the requirements document.",
+          text: "2 printers included (1 at kiosk + 1 in kitchen). Extra printers cost 99 CHF/month each.",
         },
         stripe: {
           title: "Stripe hardware payment",
@@ -194,8 +205,8 @@ const COPY = {
         contact: "Signatory",
         kiosks: "Self-order kiosks",
         pos: "POS system",
+        tablets: "Management tablets",
         printers: "Printers",
-        sla: "Support plan",
         duration: "Contract duration",
         startDate: "Effective start date",
         monthlyTotal: "Monthly total",
@@ -249,6 +260,15 @@ const COPY = {
       noteLabel: "Special instructions",
       noteField: "Menu note",
       notePlaceholder: "Add comments for the back-office team, for example separate lunch and dinner pricing, combo logic, or allergy handling.",
+      tradeLicenseLabel: "Trade license",
+      tradeLicenseTitle: "Upload your trade license",
+      tradeLicenseText: "Upload a copy of your business trade license or company registration document.",
+      deliveryPlatformLabel: "Online delivery platforms",
+      deliveryPlatformText: "If you have an active page on UberEats or JustEat, add the links below so TapGo can reference them during setup.",
+      uberEatsField: "UberEats page link",
+      uberEatsPlaceholder: "https://www.ubereats.com/...",
+      justEatField: "JustEat page link",
+      justEatPlaceholder: "https://www.just-eat.ch/...",
       deliveryLabel: "Delivery",
       delivery: {
         tapgo: {
@@ -293,14 +313,15 @@ const COPY = {
         language: "Language",
         kioskType: "Kiosk type",
         kiosks: "Kiosk quantity",
+        pos: "POS quantity",
+        tablets: "Tablets",
         printers: "Printers",
         terminals: "myPOS terminals",
-        pos: "POS quantity",
       },
       oneTime: "One-time Stripe basket",
       total: "Recurring monthly total",
       stepNotes: [
-        "Kiosks, POS, and printers are configurable; terminals are calculated automatically as kiosks + 1.",
+        "Kiosks, POS, tablets, and printers are configurable; terminals are calculated automatically as kiosks + 1.",
         "Business data now maps directly into the generated documents and stays ready for notification emails.",
         "The legal start date remains blank here by design and is completed on installation day.",
         "Menu uploads accept multiple files and stay validated against the SRD limits.",
@@ -330,6 +351,7 @@ const COPY = {
       oneTime: "CHF",
       stripeInfo: "{count} myPOS terminals are prepared for the one-time Stripe payment.",
       kioskMonthly: "Kiosks ({count} × 99 CHF)",
+      tabletMonthly: "Tablets ({count} × 19 CHF)",
       successWithFilesAndLink: "Your signed contract, company data, {count} menu file(s), and the shared menu link are prepared for delivery to contract@tapgo.ch.",
       successWithFiles: "Your signed contract, company data, and {count} menu file(s) are prepared for delivery to contract@tapgo.ch.",
       successWithLink: "Your signed contract, company data, and shared menu link are prepared for delivery to contract@tapgo.ch.",
@@ -395,8 +417,13 @@ const COPY = {
         },
         pos: {
           title: "Système POS",
-          tag: "Obligatoire",
-          text: "Station caisse configurable à CHF 49 par mois. Au moins un POS est requis.",
+          tag: "Optionnel",
+          text: "Station caisse configurable à CHF 49 par mois.",
+        },
+        tablet: {
+          title: "Tablette de gestion",
+          tag: "Mensuel",
+          text: "CHF 19 par tablette par mois. Requise sans POS.",
         },
         terminals: {
           title: "Terminaux myPOS",
@@ -417,7 +444,7 @@ const COPY = {
         },
         scalable: {
           title: "Logique matérielle scalable",
-          text: "La caisse est fixe, les terminaux sont automatiques et les imprimantes suivent le matériel choisi par défaut.",
+          text: "Les terminaux sont automatiques ; 2 imprimantes incluses. Imprimantes supplémentaires à 99 CHF/mois.",
         },
         cash: {
           title: "Séparation de prix claire",
@@ -436,9 +463,11 @@ const COPY = {
       slaLabel: "Niveau de support",
       fields: {
         companyName: "Raison sociale",
-        companyAddress: "Adresse de la société",
+        companyStreet: "Rue et numéro",
+        companyPostalCity: "NPA et ville",
         restaurantName: "Nom du restaurant",
-        restaurantAddress: "Adresse du restaurant",
+        restaurantStreet: "Rue et numéro",
+        restaurantPostalCity: "NPA et ville",
         contactPerson: "Personne de contact / signataire",
         email: "Adresse e-mail",
         phone: "Téléphone",
@@ -446,9 +475,11 @@ const COPY = {
       },
       placeholders: {
         companyName: "Exemple : Bouafif Partners SA",
-        companyAddress: "Rue, NPA, ville",
+        companyStreet: "rue du Criblet 5",
+        companyPostalCity: "1700 Fribourg",
         restaurantName: "Exemple : TFK Restaurant",
-        restaurantAddress: "Adresse du restaurant",
+        restaurantStreet: "rue du Criblet 5",
+        restaurantPostalCity: "1700 Fribourg",
         contactPerson: "Prénom Nom",
         email: "contact@restaurant.ch",
         phone: "+41 76 000 00 00",
@@ -458,7 +489,7 @@ const COPY = {
         printers: {
           title: "Nombre d'imprimantes",
           tag: "Modifiable",
-          text: "Par défaut : bornes + POS, conformément au cahier des charges.",
+          text: "2 imprimantes incluses (1 à la borne + 1 en cuisine). Supplémentaires : 99 CHF/mois.",
         },
         stripe: {
           title: "Paiement matériel Stripe",
@@ -519,8 +550,8 @@ const COPY = {
         contact: "Signataire",
         kiosks: "Bornes de commande",
         pos: "Système POS",
+        tablets: "Tablettes de gestion",
         printers: "Imprimantes",
-        sla: "Support",
         duration: "Durée contractuelle",
         startDate: "Date d'effet",
         monthlyTotal: "Total mensuel",
@@ -574,6 +605,15 @@ const COPY = {
       noteLabel: "Instructions spéciales",
       noteField: "Note menu",
       notePlaceholder: "Ajoutez des précisions pour l'équipe back-office : menus midi/soir, logiques de combos, allergènes, etc.",
+      tradeLicenseLabel: "Registre du commerce",
+      tradeLicenseTitle: "Téléversez votre registre du commerce",
+      tradeLicenseText: "Joignez une copie de votre extrait de registre du commerce ou document d'immatriculation.",
+      deliveryPlatformLabel: "Plateformes de livraison en ligne",
+      deliveryPlatformText: "Si vous avez une page active sur UberEats ou JustEat, ajoutez les liens ci-dessous.",
+      uberEatsField: "Lien page UberEats",
+      uberEatsPlaceholder: "https://www.ubereats.com/...",
+      justEatField: "Lien page JustEat",
+      justEatPlaceholder: "https://www.just-eat.ch/...",
       deliveryLabel: "Livraison",
       delivery: {
         tapgo: {
@@ -618,14 +658,15 @@ const COPY = {
         language: "Langue",
         kioskType: "Type de borne",
         kiosks: "Quantité de bornes",
+        pos: "Quantité POS",
+        tablets: "Tablettes",
         printers: "Imprimantes",
         terminals: "Terminaux myPOS",
-        pos: "Quantité POS",
       },
       oneTime: "Panier Stripe unique",
       total: "Total mensuel récurrent",
       stepNotes: [
-        "Bornes, POS et imprimantes sont configurables ; les terminaux sont calculés automatiquement (bornes + 1).",
+        "Bornes, POS, tablettes et imprimantes sont configurables ; les terminaux sont calculés automatiquement (bornes + 1).",
         "Les données société alimentent désormais directement les documents générés et les notifications.",
         "La date de démarrage reste volontairement vide ici et sera complétée le jour d'installation.",
         "Les uploads menu respectent les limites du SRD tout en restant multi-fichiers.",
@@ -655,6 +696,7 @@ const COPY = {
       oneTime: "CHF",
       stripeInfo: "{count} terminaux myPOS sont préparés pour le paiement matériel Stripe.",
       kioskMonthly: "Bornes ({count} × 99 CHF)",
+      tabletMonthly: "Tablettes ({count} × 19 CHF)",
       successWithFilesAndLink: "Votre contrat signé, vos données société, {count} fichier(s) menu et le lien du menu sont prêts pour contract@tapgo.ch.",
       successWithFiles: "Votre contrat signé, vos données société et {count} fichier(s) menu sont prêts pour contract@tapgo.ch.",
       successWithLink: "Votre contrat signé, vos données société et le lien du menu sont prêts pour contract@tapgo.ch.",
@@ -720,8 +762,13 @@ const COPY = {
         },
         pos: {
           title: "POS-System",
-          tag: "Pflicht",
-          text: "Konfigurierbare Kassenstation zu CHF 49 pro Monat. Mindestens ein POS ist erforderlich.",
+          tag: "Optional",
+          text: "Konfigurierbare Kassenstation zu CHF 49 pro Monat.",
+        },
+        tablet: {
+          title: "Management-Tablet",
+          tag: "Monatlich",
+          text: "CHF 19 pro Tablet pro Monat. Erforderlich ohne POS.",
         },
         terminals: {
           title: "myPOS-Terminals",
@@ -761,9 +808,11 @@ const COPY = {
       slaLabel: "Supportplan",
       fields: {
         companyName: "Firmenname / juristischer Name",
-        companyAddress: "Firmenadresse",
+        companyStreet: "Strasse und Hausnummer",
+        companyPostalCity: "PLZ und Ort",
         restaurantName: "Restaurantname",
-        restaurantAddress: "Restaurantadresse",
+        restaurantStreet: "Strasse und Hausnummer",
+        restaurantPostalCity: "PLZ und Ort",
         contactPerson: "Kontaktperson / Unterzeichner",
         email: "E-Mail-Adresse",
         phone: "Telefonnummer",
@@ -771,9 +820,11 @@ const COPY = {
       },
       placeholders: {
         companyName: "Beispiel: Bouafif Partners SA",
-        companyAddress: "Strasse, PLZ, Ort",
+        companyStreet: "Bernstrasse 15a",
+        companyPostalCity: "3280 Murten",
         restaurantName: "Beispiel: TFK Restaurant",
-        restaurantAddress: "Restaurantstandort",
+        restaurantStreet: "Bernstrasse 15a",
+        restaurantPostalCity: "3280 Murten",
         contactPerson: "Vorname Nachname",
         email: "contact@restaurant.ch",
         phone: "+41 76 000 00 00",
@@ -783,7 +834,7 @@ const COPY = {
         printers: {
           title: "Anzahl Drucker",
           tag: "Bearbeitbar",
-          text: "Standardmässig Kioske + POS, wie im Anforderungspapier beschrieben.",
+          text: "2 Drucker inklusive (1 am Kiosk + 1 in der Küche). Zusätzliche: 99 CHF/Monat.",
         },
         stripe: {
           title: "Stripe-Hardwarezahlung",
@@ -844,8 +895,8 @@ const COPY = {
         contact: "Unterzeichner",
         kiosks: "Bestellkioske",
         pos: "POS-System",
+        tablets: "Management-Tablets",
         printers: "Drucker",
-        sla: "Supportplan",
         duration: "Vertragsdauer",
         startDate: "Wirksamkeitsdatum",
         monthlyTotal: "Monatstotal",
@@ -899,6 +950,15 @@ const COPY = {
       noteLabel: "Spezielle Hinweise",
       noteField: "Menü-Hinweis",
       notePlaceholder: "Ergänzen Sie Hinweise für das Back-Office, z. B. Mittags-/Abendkarten, Kombilogik oder Allergenhinweise.",
+      tradeLicenseLabel: "Handelsregisterauszug",
+      tradeLicenseTitle: "Laden Sie Ihren Handelsregisterauszug hoch",
+      tradeLicenseText: "Fügen Sie eine Kopie Ihres Handelsregisterauszugs oder Gründungsdokuments bei.",
+      deliveryPlatformLabel: "Online-Lieferplattformen",
+      deliveryPlatformText: "Falls Sie eine aktive Seite auf UberEats oder JustEat haben, fügen Sie die Links unten hinzu.",
+      uberEatsField: "UberEats-Seitenlink",
+      uberEatsPlaceholder: "https://www.ubereats.com/...",
+      justEatField: "JustEat-Seitenlink",
+      justEatPlaceholder: "https://www.just-eat.ch/...",
       deliveryLabel: "Zustellung",
       delivery: {
         tapgo: {
@@ -943,9 +1003,10 @@ const COPY = {
         language: "Sprache",
         kioskType: "Kiosktyp",
         kiosks: "Kioskanzahl",
+        pos: "POS-Anzahl",
+        tablets: "Tablets",
         printers: "Drucker",
         terminals: "myPOS-Terminals",
-        pos: "POS-Anzahl",
       },
       oneTime: "Einmaliger Stripe-Korb",
       total: "Wiederkehrender Monatstotal",
@@ -980,6 +1041,7 @@ const COPY = {
       oneTime: "CHF",
       stripeInfo: "{count} myPOS-Terminals sind für die einmalige Stripe-Zahlung vorbereitet.",
       kioskMonthly: "Kioske ({count} × 99 CHF)",
+      tabletMonthly: "Tablets ({count} × 19 CHF)",
       successWithFilesAndLink: "Ihr unterschriebener Vertrag, Ihre Firmendaten, {count} Menüdatei(en) und der Menülink sind für contract@tapgo.ch vorbereitet.",
       successWithFiles: "Ihr unterschriebener Vertrag, Ihre Firmendaten und {count} Menüdatei(en) sind für contract@tapgo.ch vorbereitet.",
       successWithLink: "Ihr unterschriebener Vertrag, Ihre Firmendaten und der Menülink sind für contract@tapgo.ch vorbereitet.",
@@ -1045,8 +1107,13 @@ const COPY = {
         },
         pos: {
           title: "Sistema POS",
-          tag: "Obbligatorio",
-          text: "Postazione cassa configurabile a CHF 49 al mese. È richiesta almeno una postazione POS.",
+          tag: "Opzionale",
+          text: "Postazione cassa configurabile a CHF 49 al mese.",
+        },
+        tablet: {
+          title: "Tablet di gestione",
+          tag: "Mensile",
+          text: "CHF 19 per tablet al mese. Richiesto senza POS.",
         },
         terminals: {
           title: "Terminali myPOS",
@@ -1086,9 +1153,11 @@ const COPY = {
       slaLabel: "Piano di supporto",
       fields: {
         companyName: "Ragione sociale",
-        companyAddress: "Indirizzo azienda",
+        companyStreet: "Via e numero civico",
+        companyPostalCity: "CAP e città",
         restaurantName: "Nome ristorante",
-        restaurantAddress: "Indirizzo ristorante",
+        restaurantStreet: "Via e numero civico",
+        restaurantPostalCity: "CAP e città",
         contactPerson: "Persona di contatto / firmatario",
         email: "Indirizzo e-mail",
         phone: "Numero di telefono",
@@ -1096,9 +1165,11 @@ const COPY = {
       },
       placeholders: {
         companyName: "Esempio: Bouafif Partners SA",
-        companyAddress: "Via, CAP, città",
+        companyStreet: "Via del Criblet 5",
+        companyPostalCity: "1700 Friburgo",
         restaurantName: "Esempio: TFK Restaurant",
-        restaurantAddress: "Sede del ristorante",
+        restaurantStreet: "Via del Criblet 5",
+        restaurantPostalCity: "1700 Friburgo",
         contactPerson: "Nome e cognome",
         email: "contact@restaurant.ch",
         phone: "+41 76 000 00 00",
@@ -1108,7 +1179,7 @@ const COPY = {
         printers: {
           title: "Numero stampanti",
           tag: "Modificabile",
-          text: "Default kiosk + POS, come richiesto nel documento requisiti.",
+          text: "2 stampanti incluse (1 al kiosk + 1 in cucina). Aggiuntive: 99 CHF/mese.",
         },
         stripe: {
           title: "Pagamento hardware Stripe",
@@ -1169,8 +1240,8 @@ const COPY = {
         contact: "Firmatario",
         kiosks: "Kiosk ordine",
         pos: "Sistema POS",
+        tablets: "Tablet di gestione",
         printers: "Stampanti",
-        sla: "Piano supporto",
         duration: "Durata contratto",
         startDate: "Data efficacia",
         monthlyTotal: "Totale mensile",
@@ -1224,6 +1295,15 @@ const COPY = {
       noteLabel: "Istruzioni speciali",
       noteField: "Nota menu",
       notePlaceholder: "Aggiungi commenti per il back-office: menu pranzo/cena, logiche combo, allergeni, ecc.",
+      tradeLicenseLabel: "Licenza commerciale",
+      tradeLicenseTitle: "Carica la tua licenza commerciale",
+      tradeLicenseText: "Allega una copia della licenza commerciale o del documento di registrazione aziendale.",
+      deliveryPlatformLabel: "Piattaforme di consegna online",
+      deliveryPlatformText: "Se hai una pagina attiva su UberEats o JustEat, aggiungi i link qui sotto.",
+      uberEatsField: "Link pagina UberEats",
+      uberEatsPlaceholder: "https://www.ubereats.com/...",
+      justEatField: "Link pagina JustEat",
+      justEatPlaceholder: "https://www.just-eat.ch/...",
       deliveryLabel: "Consegna",
       delivery: {
         tapgo: {
@@ -1268,9 +1348,10 @@ const COPY = {
         language: "Lingua",
         kioskType: "Tipo kiosk",
         kiosks: "Quantità kiosk",
+        pos: "Quantità POS",
+        tablets: "Tablet",
         printers: "Stampanti",
         terminals: "Terminali myPOS",
-        pos: "Quantità POS",
       },
       oneTime: "Carrello Stripe una tantum",
       total: "Totale mensile ricorrente",
@@ -1305,6 +1386,7 @@ const COPY = {
       oneTime: "CHF",
       stripeInfo: "{count} terminali myPOS sono pronti per il pagamento hardware Stripe.",
       kioskMonthly: "Kiosk ({count} × 99 CHF)",
+      tabletMonthly: "Tablet ({count} × 19 CHF)",
       successWithFilesAndLink: "Il contratto firmato, i dati aziendali, {count} file menu e il link al menu sono pronti per contract@tapgo.ch.",
       successWithFiles: "Il contratto firmato, i dati aziendali e {count} file menu sono pronti per contract@tapgo.ch.",
       successWithLink: "Il contratto firmato, i dati aziendali e il link al menu sono pronti per contract@tapgo.ch.",
@@ -1370,8 +1452,13 @@ const COPY = {
         },
         pos: {
           title: "POS sistemi",
-          tag: "Zorunlu",
-          text: "Ayda CHF 49 olan yapılandırılabilir kasa istasyonu. En az bir POS gereklidir.",
+          tag: "Opsiyonel",
+          text: "Ayda CHF 49 olan yapılandırılabilir kasa istasyonu.",
+        },
+        tablet: {
+          title: "Yönetim tableti",
+          tag: "Aylık",
+          text: "Ayda 19 CHF/tablet. POS olmadan zorunludur.",
         },
         terminals: {
           title: "myPOS terminalleri",
@@ -1411,9 +1498,11 @@ const COPY = {
       slaLabel: "Destek planı",
       fields: {
         companyName: "Şirket / yasal unvan",
-        companyAddress: "Şirket adresi",
+        companyStreet: "Cadde ve numara",
+        companyPostalCity: "Posta kodu ve şehir",
         restaurantName: "Restoran adı",
-        restaurantAddress: "Restoran adresi",
+        restaurantStreet: "Cadde ve numara",
+        restaurantPostalCity: "Posta kodu ve şehir",
         contactPerson: "İletişim kişisi / imzacı",
         email: "E-posta adresi",
         phone: "Telefon numarası",
@@ -1421,9 +1510,11 @@ const COPY = {
       },
       placeholders: {
         companyName: "Örnek: Bouafif Partners SA",
-        companyAddress: "Cadde, posta kodu, şehir",
+        companyStreet: "Bernstrasse 15a",
+        companyPostalCity: "3280 Murten",
         restaurantName: "Örnek: TFK Restaurant",
-        restaurantAddress: "Restoran konumu",
+        restaurantStreet: "Bernstrasse 15a",
+        restaurantPostalCity: "3280 Murten",
         contactPerson: "Ad Soyad",
         email: "contact@restaurant.ch",
         phone: "+41 76 000 00 00",
@@ -1433,7 +1524,7 @@ const COPY = {
         printers: {
           title: "Yazıcı sayısı",
           tag: "Düzenlenebilir",
-          text: "Gereksinim dokümanına göre varsayılan kiosk + POS olarak gelir.",
+          text: "2 yazıcı dahil (1 kioskta + 1 mutfakta). Ekstra yazıcılar: 99 CHF/ay.",
         },
         stripe: {
           title: "Stripe donanım ödemesi",
@@ -1494,8 +1585,8 @@ const COPY = {
         contact: "İmzacı",
         kiosks: "Sipariş kioskları",
         pos: "POS sistemi",
+        tablets: "Yönetim tabletleri",
         printers: "Yazıcılar",
-        sla: "Destek planı",
         duration: "Sözleşme süresi",
         startDate: "Yürürlük tarihi",
         monthlyTotal: "Aylık toplam",
@@ -1549,6 +1640,15 @@ const COPY = {
       noteLabel: "Özel talimatlar",
       noteField: "Menü notu",
       notePlaceholder: "Back-office ekibi için not ekleyin: öğle/akşam menüsü, combo mantığı, alerjenler vb.",
+      tradeLicenseLabel: "Ticaret sicil belgesi",
+      tradeLicenseTitle: "Ticaret sicil belgenizi yükleyin",
+      tradeLicenseText: "İşletme ticaret sicil belgesi veya şirket kayıt belgesinin bir kopyasını ekleyin.",
+      deliveryPlatformLabel: "Online teslimat platformları",
+      deliveryPlatformText: "UberEats veya JustEat'te aktif bir sayfanız varsa aşağıya linkleri ekleyin.",
+      uberEatsField: "UberEats sayfa linki",
+      uberEatsPlaceholder: "https://www.ubereats.com/...",
+      justEatField: "JustEat sayfa linki",
+      justEatPlaceholder: "https://www.just-eat.ch/...",
       deliveryLabel: "Teslimat",
       delivery: {
         tapgo: {
@@ -1593,9 +1693,10 @@ const COPY = {
         language: "Dil",
         kioskType: "Kiosk tipi",
         kiosks: "Kiosk adedi",
+        pos: "POS miktarı",
+        tablets: "Tabletler",
         printers: "Yazıcılar",
         terminals: "myPOS terminalleri",
-        pos: "POS miktarı",
       },
       oneTime: "Tek seferlik Stripe sepeti",
       total: "Tekrarlayan aylık toplam",
@@ -1630,6 +1731,7 @@ const COPY = {
       oneTime: "CHF",
       stripeInfo: "{count} myPOS terminali tek seferlik Stripe ödemesi için hazırlandı.",
       kioskMonthly: "Kiosklar ({count} × 99 CHF)",
+      tabletMonthly: "Tabletler ({count} × 19 CHF)",
       successWithFilesAndLink: "İmzalı sözleşmeniz, şirket bilgileriniz, {count} menu dosyasi ve paylasilan menu baglantisi contract@tapgo.ch için hazırlandı.",
       successWithFiles: "İmzalı sözleşmeniz, şirket bilgileriniz ve {count} menü dosyası contract@tapgo.ch için hazırlandı.",
       successWithLink: "İmzalı sözleşmeniz, şirket bilgileriniz ve paylasilan menu baglantisi contract@tapgo.ch için hazırlandı.",
@@ -1648,28 +1750,35 @@ const state = {
   step: 1,
   kioskType: "standing",
   kioskCount: 1,
+  posCount: 0,
+  tabletCount: 1,
+  tabletTouched: false,
   printerCount: 2,
-  posCount: 1,
   printerTouched: false,
   ethernet: false,
   sla: "standard",
   signed: false,
   signatureData: "",
   files: [],
+  tradeLicenseFiles: [],
   submitted: false,
   reference: buildReference(),
   serverConfig: null,
   submissionResult: null,
   form: {
     companyName: "",
-    companyAddress: "",
+    companyStreet: "",
+    companyPostalCity: "",
     restaurantName: "",
-    restaurantAddress: "",
+    restaurantStreet: "",
+    restaurantPostalCity: "",
     contactPerson: "",
     emailAddress: "",
     phoneNumber: "",
     menuLink: "",
     menuNote: "",
+    uberEatsLink: "",
+    justEatLink: "",
   },
 };
 
@@ -1699,9 +1808,14 @@ function cacheElements() {
   elements.kioskPlus = document.getElementById("kioskPlus");
   elements.posMinus = document.getElementById("posMinus");
   elements.posPlus = document.getElementById("posPlus");
+  elements.tabletMinus = document.getElementById("tabletMinus");
+  elements.tabletPlus = document.getElementById("tabletPlus");
   elements.printerMinus = document.getElementById("printerMinus");
   elements.printerPlus = document.getElementById("printerPlus");
   elements.ethernetToggle = document.getElementById("ethernetToggle");
+  elements.tradeLicenseUpload = document.getElementById("tradeLicenseUpload");
+  elements.tradeLicenseList = document.getElementById("tradeLicenseList");
+  elements.tradeLicenseError = document.getElementById("tradeLicenseError");
   elements.toStep2 = document.getElementById("toStep2");
   elements.toStep3 = document.getElementById("toStep3");
   elements.toStep4 = document.getElementById("toStep4");
@@ -1739,6 +1853,8 @@ function bindEvents() {
   elements.kioskPlus.addEventListener("click", () => changeKiosk(1));
   elements.posMinus.addEventListener("click", () => changePOS(-1));
   elements.posPlus.addEventListener("click", () => changePOS(1));
+  if (elements.tabletMinus) elements.tabletMinus.addEventListener("click", () => changeTablet(-1));
+  if (elements.tabletPlus) elements.tabletPlus.addEventListener("click", () => changeTablet(1));
   elements.printerMinus.addEventListener("click", () => changePrinter(-1));
   elements.printerPlus.addEventListener("click", () => changePrinter(1));
   elements.ethernetToggle.addEventListener("click", toggleEthernet);
@@ -1768,16 +1884,20 @@ function bindEvents() {
     });
   });
 
-  ["companyName", "companyAddress", "restaurantName", "restaurantAddress", "contactPerson", "emailAddress", "phoneNumber", "menuLink", "menuNote"].forEach((id) => {
+  ["companyName", "companyStreet", "companyPostalCity", "restaurantName", "restaurantStreet", "restaurantPostalCity", "contactPerson", "emailAddress", "phoneNumber", "menuLink", "menuNote", "uberEatsLink", "justEatLink"].forEach((id) => {
     const field = document.getElementById(id);
     if (!field) return;
     field.addEventListener("input", () => {
       state.form[id] = field.value.trim();
-      if (id !== "menuNote") {
+      if (id !== "menuNote" && id !== "uberEatsLink" && id !== "justEatLink") {
         validateStep2(false);
       }
     });
   });
+
+  if (elements.tradeLicenseUpload) {
+    elements.tradeLicenseUpload.addEventListener("change", handleTradeLicenseSelection);
+  }
 
   ["acceptCommitment", "acceptTerms"].forEach((id) => {
     document.getElementById(id).addEventListener("change", validateStep3);
@@ -1818,6 +1938,7 @@ function renderAll() {
   renderFormValues();
   renderDocuments();
   renderUploadList();
+  renderTradeLicenseList();
   renderSuccessState();
   validateStep2(false);
   validateStep3();
@@ -1856,6 +1977,10 @@ function translateStatic() {
   document.getElementById("summaryPosLabel").textContent = template(textFor("templates.posMonthly"), {
     count: state.posCount,
   });
+  const tabletLabelEl = document.getElementById("summaryTabletLabel");
+  if (tabletLabelEl) {
+    tabletLabelEl.textContent = template(textFor("templates.tabletMonthly"), { count: state.tabletCount });
+  }
   document.getElementById("summarySlaLabel").textContent = textFor("summary.supportLabel");
   document.getElementById("summaryNote").textContent = textFor(`summary.stepNotes.${state.step - 1}`);
 }
@@ -1928,11 +2053,25 @@ function renderSelections() {
   document.getElementById("checkCardTerms").classList.toggle("is-selected", document.getElementById("acceptTerms").checked);
 
   elements.kioskMinus.disabled = state.kioskCount <= 1;
-  elements.posMinus.disabled = state.posCount <= 1;
+  elements.posMinus.disabled = state.posCount <= 0;
   elements.printerMinus.disabled = state.printerCount <= 1;
   document.getElementById("kioskCount").textContent = state.kioskCount;
   document.getElementById("posCount").textContent = state.posCount;
   document.getElementById("printerCount").textContent = state.printerCount;
+  const tabletMinusBtn = document.getElementById("tabletMinus");
+  const tabletPlusBtn = document.getElementById("tabletPlus");
+  const tabletCountEl = document.getElementById("tabletCount");
+  const tabletPriceEl = document.getElementById("tabletPrice");
+  if (tabletMinusBtn) {
+    const minTablet = state.posCount === 0 ? 1 : 0;
+    tabletMinusBtn.disabled = state.tabletCount <= minTablet;
+  }
+  if (tabletCountEl) tabletCountEl.textContent = state.tabletCount;
+  if (tabletPriceEl) {
+    tabletPriceEl.textContent = state.tabletCount > 0
+      ? formatRecurring(state.tabletCount * PRICING.tablet)
+      : `+${formatRecurring(PRICING.tablet)}`;
+  }
 }
 
 function renderPricing() {
@@ -1942,18 +2081,29 @@ function renderPricing() {
   const oneTimeFormatted = formatMoney(oneTime);
 
   document.getElementById("kioskPrice").textContent = formatRecurring(state.kioskCount * PRICING.kiosk);
-  document.getElementById("posPrice").textContent = formatRecurring(state.posCount * PRICING.pos);
+  document.getElementById("posPrice").textContent = state.posCount > 0
+    ? formatRecurring(state.posCount * PRICING.pos)
+    : `+${formatRecurring(PRICING.pos)}`;
   document.getElementById("terminalCount").textContent = terminalCount();
   document.getElementById("terminalPrice").textContent = formatMoney(terminalCount() * PRICING.terminal);
   document.getElementById("ethernetPrice").textContent = state.ethernet ? formatMoney(PRICING.ethernet) : `+${formatMoney(PRICING.ethernet)}`;
   document.getElementById("summaryKioskType").textContent = textFor(`summary.kioskTypes.${state.kioskType}`);
   document.getElementById("summaryKioskCount").textContent = String(state.kioskCount);
   document.getElementById("summaryPosCount").textContent = String(state.posCount);
+  document.getElementById("summaryTabletCount").textContent = String(state.tabletCount);
   document.getElementById("summaryPrinterCount").textContent = template(textFor("templates.printerValue"), { count: state.printerCount });
   document.getElementById("summaryTerminalCount").textContent = String(terminalCount());
   document.getElementById("summaryLanguage").textContent = `${LANGUAGE_META[state.lang].flag} ${LANGUAGE_META[state.lang].label}`;
   document.getElementById("summaryMonthlyValue").textContent = formatRecurring(state.kioskCount * PRICING.kiosk);
   document.getElementById("summaryPosValue").textContent = formatRecurring(state.posCount * PRICING.pos);
+  const tabletSummaryLabel = document.getElementById("summaryTabletLabel");
+  const tabletSummaryValue = document.getElementById("summaryTabletValue");
+  if (tabletSummaryLabel) {
+    tabletSummaryLabel.textContent = template(textFor("templates.tabletMonthly"), { count: state.tabletCount });
+  }
+  if (tabletSummaryValue) {
+    tabletSummaryValue.textContent = formatRecurring(state.tabletCount * PRICING.tablet);
+  }
   document.getElementById("summarySlaValue").textContent = textFor(`summary.sla.${state.sla}`);
   document.getElementById("summaryOneTimeValue").textContent = oneTimeFormatted;
   document.getElementById("summaryTotalValue").textContent = perMonth;
@@ -1990,16 +2140,18 @@ function renderDocuments() {
     addendumRef.textContent = `${state.reference} / TapGo`;
   }
 
+  const companyAddr = [state.form.companyStreet, state.form.companyPostalCity].filter(Boolean).join(", ") || "—";
+  const restaurantAddr = [state.form.restaurantStreet, state.form.restaurantPostalCity].filter(Boolean).join(", ") || "—";
   const addendumValues = {
     client: state.form.companyName || "—",
-    companyAddress: state.form.companyAddress || "—",
+    companyAddress: companyAddr,
     restaurant: state.form.restaurantName || "—",
-    restaurantAddress: state.form.restaurantAddress || "—",
+    restaurantAddress: restaurantAddr,
     contact: state.form.contactPerson || "—",
     kiosks: `${state.kioskCount} × ${formatRecurring(PRICING.kiosk)}`,
-    pos: `${state.posCount} × ${formatRecurring(PRICING.pos)}`,
+    pos: state.posCount > 0 ? `${state.posCount} × ${formatRecurring(PRICING.pos)}` : "—",
+    tablets: state.tabletCount > 0 ? `${state.tabletCount} × ${formatRecurring(PRICING.tablet)}` : "—",
     printers: template(textFor("templates.printerValue"), { count: state.printerCount }),
-    sla: textFor(`summary.sla.${state.sla}`),
     duration: textFor("templates.duration"),
     startDate: textFor("templates.blankDate"),
     monthlyTotal: formatRecurring(recurringTotal()),
@@ -2150,16 +2302,29 @@ function startOnboardingSilently() {
 function changeKiosk(delta) {
   state.kioskCount = Math.max(1, Math.min(10, state.kioskCount + delta));
   if (!state.printerTouched) {
-    state.printerCount = state.kioskCount + state.posCount;
+    state.printerCount = state.kioskCount + 1;
+  }
+  if (!state.tabletTouched && state.posCount === 0) {
+    state.tabletCount = state.kioskCount;
   }
   renderAll();
 }
 
 function changePOS(delta) {
-  state.posCount = Math.max(1, Math.min(10, state.posCount + delta));
+  state.posCount = Math.max(0, Math.min(10, state.posCount + delta));
   if (!state.printerTouched) {
-    state.printerCount = state.kioskCount + state.posCount;
+    state.printerCount = state.kioskCount + 1;
   }
+  if (!state.tabletTouched) {
+    state.tabletCount = state.posCount === 0 ? state.kioskCount : 0;
+  }
+  renderAll();
+}
+
+function changeTablet(delta) {
+  const minTablet = state.posCount === 0 ? 1 : 0;
+  state.tabletTouched = true;
+  state.tabletCount = Math.max(minTablet, Math.min(10, state.tabletCount + delta));
   renderAll();
 }
 
@@ -2189,9 +2354,11 @@ function submitStep2() {
 function validateStep2(showErrors) {
   const rules = [
     ["companyName", "errorCompanyName", "required"],
-    ["companyAddress", "errorCompanyAddress", "required"],
+    ["companyStreet", "errorCompanyStreet", "required"],
+    ["companyPostalCity", "errorCompanyPostalCity", "required"],
     ["restaurantName", "errorRestaurantName", "required"],
-    ["restaurantAddress", "errorRestaurantAddress", "required"],
+    ["restaurantStreet", "errorRestaurantStreet", "required"],
+    ["restaurantPostalCity", "errorRestaurantPostalCity", "required"],
     ["contactPerson", "errorContactPerson", "required"],
     ["emailAddress", "errorEmailAddress", "email"],
   ];
@@ -2238,7 +2405,15 @@ function validateStep3(showErrors = false) {
 }
 
 function recurringTotal() {
-  return state.kioskCount * PRICING.kiosk + state.posCount * PRICING.pos + (state.sla === "premium" ? PRICING.slaPremium : 0);
+  const includedPrinters = state.kioskCount + 1;
+  const extraPrinters = Math.max(0, state.printerCount - includedPrinters);
+  return (
+    state.kioskCount * PRICING.kiosk +
+    state.posCount * PRICING.pos +
+    state.tabletCount * PRICING.tablet +
+    extraPrinters * PRICING.printer +
+    (state.sla === "premium" ? PRICING.slaPremium : 0)
+  );
 }
 
 function terminalCount() {
@@ -2407,10 +2582,69 @@ function handleUploadSelection(event) {
   renderUploadList();
 }
 
+function handleTradeLicenseSelection(event) {
+  if (!elements.tradeLicenseUpload) return;
+  const incoming = Array.from(event.target.files || []);
+  const merged = [...state.tradeLicenseFiles];
+  let hasError = false;
+
+  for (const file of incoming) {
+    const extension = file.name.split(".").pop()?.toLowerCase() || "";
+    if (!["pdf", "jpg", "jpeg", "png", "docx"].includes(extension)) {
+      if (elements.tradeLicenseError) setFieldError(elements.tradeLicenseError, textFor("errors.fileType"));
+      hasError = true;
+      continue;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      if (elements.tradeLicenseError) setFieldError(elements.tradeLicenseError, textFor("errors.fileSize"));
+      hasError = true;
+      continue;
+    }
+    const duplicate = merged.find((existing) => existing.name === file.name && existing.size === file.size);
+    if (!duplicate) merged.push(file);
+  }
+
+  if (!hasError && elements.tradeLicenseError) clearFieldError(elements.tradeLicenseError);
+  state.tradeLicenseFiles = merged;
+  elements.tradeLicenseUpload.value = "";
+  renderTradeLicenseList();
+}
+
+function renderTradeLicenseList() {
+  if (!elements.tradeLicenseList) return;
+  elements.tradeLicenseList.innerHTML = "";
+  state.tradeLicenseFiles.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "upload-item";
+    item.innerHTML = `
+      <div>
+        <div class="upload-item__name">${escapeHtml(file.name)}</div>
+        <div class="upload-item__meta">${formatFileSize(file.size)}</div>
+      </div>
+    `;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "btn-text";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", "Remove file");
+    remove.addEventListener("click", () => {
+      state.tradeLicenseFiles.splice(index, 1);
+      renderTradeLicenseList();
+      if (elements.tradeLicenseError) clearFieldError(elements.tradeLicenseError);
+    });
+    item.appendChild(remove);
+    elements.tradeLicenseList.appendChild(item);
+  });
+}
+
 async function finalizeSubmission() {
   clearFieldError(elements.uploadError);
   state.form.menuLink = document.getElementById("menuLink").value.trim();
   state.form.menuNote = document.getElementById("menuNote").value.trim();
+  const uberEatsEl = document.getElementById("uberEatsLink");
+  const justEatEl = document.getElementById("justEatLink");
+  if (uberEatsEl) state.form.uberEatsLink = uberEatsEl.value.trim();
+  if (justEatEl) state.form.justEatLink = justEatEl.value.trim();
   if (state.form.menuLink && !isValidMenuLink(state.form.menuLink)) {
     setFieldError(elements.uploadError, invalidMenuLinkMessage());
     return;
@@ -2426,6 +2660,9 @@ async function finalizeSubmission() {
     formData.append("payload", JSON.stringify(buildPayload()));
     state.files.forEach((file) => {
       formData.append("menu_files", file, file.name);
+    });
+    state.tradeLicenseFiles.forEach((file) => {
+      formData.append("trade_license_files", file, file.name);
     });
 
     const response = await fetch("/api/submissions", {
@@ -2605,12 +2842,15 @@ function formatFileSize(bytes) {
 }
 
 function buildPayload() {
+  const companyAddress = [state.form.companyStreet, state.form.companyPostalCity].filter(Boolean).join(", ");
+  const restaurantAddress = [state.form.restaurantStreet, state.form.restaurantPostalCity].filter(Boolean).join(", ");
   return {
     reference: state.reference,
     language: state.lang,
     kioskType: state.kioskType,
     kioskCount: state.kioskCount,
     posCount: state.posCount,
+    tabletCount: state.tabletCount,
     printerCount: state.printerCount,
     ethernet: state.ethernet,
     sla: state.sla,
@@ -2622,11 +2862,13 @@ function buildPayload() {
     clientTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     menuLink: state.form.menuLink,
     menuNote: state.form.menuNote,
+    uberEatsLink: state.form.uberEatsLink,
+    justEatLink: state.form.justEatLink,
     form: {
       companyName: state.form.companyName,
-      companyAddress: state.form.companyAddress,
+      companyAddress: companyAddress,
       restaurantName: state.form.restaurantName,
-      restaurantAddress: state.form.restaurantAddress,
+      restaurantAddress: restaurantAddress,
       contactPerson: state.form.contactPerson,
       emailAddress: state.form.emailAddress,
       phoneNumber: state.form.phoneNumber,

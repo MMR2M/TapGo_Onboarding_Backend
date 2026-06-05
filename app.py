@@ -51,6 +51,8 @@ SUPPORTED_SLA = {"standard", "premium"}
 PRICING = {
     "kiosk": 99,
     "pos": 49,
+    "tablet": 19,
+    "printer": 99,
     "sla_premium": 9,
     "terminal": 199,
     "ethernet": 300,
@@ -87,6 +89,7 @@ CONTRACT_COPY = {
             "kiosk_type": "Kiosk type",
             "kiosk_count": "Self-order kiosks",
             "pos_count": "POS systems",
+            "tablet_count": "Management tablets",
             "printer_count": "Printers",
             "terminal_count": "myPOS terminals",
             "ethernet": "Ethernet installation",
@@ -165,6 +168,7 @@ CONTRACT_COPY = {
             "kiosk_type": "Type de borne",
             "kiosk_count": "Bornes de commande",
             "pos_count": "Systèmes POS",
+            "tablet_count": "Tablettes de gestion",
             "printer_count": "Imprimantes",
             "terminal_count": "Terminaux myPOS",
             "ethernet": "Installation Ethernet",
@@ -243,6 +247,7 @@ CONTRACT_COPY = {
             "kiosk_type": "Kiosktyp",
             "kiosk_count": "Self-Order-Kioske",
             "pos_count": "POS-Systeme",
+            "tablet_count": "Management-Tablets",
             "printer_count": "Drucker",
             "terminal_count": "myPOS-Terminals",
             "ethernet": "Ethernet-Installation",
@@ -321,6 +326,7 @@ CONTRACT_COPY = {
             "kiosk_type": "Tipo kiosk",
             "kiosk_count": "Kiosk self-order",
             "pos_count": "Sistemi POS",
+            "tablet_count": "Tablet di gestione",
             "printer_count": "Stampanti",
             "terminal_count": "Terminali myPOS",
             "ethernet": "Installazione Ethernet",
@@ -399,6 +405,7 @@ CONTRACT_COPY = {
             "kiosk_type": "Kiosk tipi",
             "kiosk_count": "Self-order kiosklar",
             "pos_count": "POS sistemleri",
+            "tablet_count": "Yönetim tabletleri",
             "printer_count": "Yazıcılar",
             "terminal_count": "myPOS terminalleri",
             "ethernet": "Ethernet kurulumu",
@@ -508,6 +515,7 @@ def init_database() -> None:
                 kiosk_type TEXT NOT NULL,
                 kiosk_count INTEGER NOT NULL,
                 pos_count INTEGER NOT NULL,
+                tablet_count INTEGER NOT NULL DEFAULT 0,
                 printer_count INTEGER NOT NULL,
                 terminal_count INTEGER NOT NULL,
                 ethernet INTEGER NOT NULL,
@@ -521,6 +529,8 @@ def init_database() -> None:
                 contract_html_path TEXT NOT NULL,
                 signature_path TEXT,
                 menu_note TEXT,
+                uber_eats_link TEXT,
+                just_eat_link TEXT,
                 access_token TEXT,
                 form_payload_json TEXT NOT NULL
             )
@@ -529,6 +539,12 @@ def init_database() -> None:
         columns = {row[1] for row in conn.execute("PRAGMA table_info(submissions)")}
         if "access_token" not in columns:
             conn.execute("ALTER TABLE submissions ADD COLUMN access_token TEXT")
+        if "tablet_count" not in columns:
+            conn.execute("ALTER TABLE submissions ADD COLUMN tablet_count INTEGER NOT NULL DEFAULT 0")
+        if "uber_eats_link" not in columns:
+            conn.execute("ALTER TABLE submissions ADD COLUMN uber_eats_link TEXT")
+        if "just_eat_link" not in columns:
+            conn.execute("ALTER TABLE submissions ADD COLUMN just_eat_link TEXT")
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS submission_files (
@@ -539,11 +555,15 @@ def init_database() -> None:
                 stored_path TEXT NOT NULL,
                 mime_type TEXT,
                 size_bytes INTEGER NOT NULL,
+                file_category TEXT NOT NULL DEFAULT 'menu',
                 created_at TEXT NOT NULL,
                 FOREIGN KEY(submission_reference) REFERENCES submissions(reference)
             )
             """
         )
+        file_columns = {row[1] for row in conn.execute("PRAGMA table_info(submission_files)")}
+        if "file_category" not in file_columns:
+            conn.execute("ALTER TABLE submission_files ADD COLUMN file_category TEXT NOT NULL DEFAULT 'menu'")
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS email_logs (
@@ -688,15 +708,18 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
     language = payload.get("language") or "en"
     kiosk_type = payload.get("kioskType")
     kiosk_count = int(payload.get("kioskCount", 0) or 0)
-    pos_count = int(payload.get("posCount", 1) or 1)
+    pos_count = int(payload.get("posCount", 0) or 0)
+    tablet_count = int(payload.get("tabletCount", 0) or 0)
     printer_count = int(payload.get("printerCount", 0) or 0)
     ethernet = parse_bool(payload.get("ethernet"))
-    sla = payload.get("sla")
+    sla = payload.get("sla") or "standard"
     signature_data = payload.get("signatureData", "")
     accepted_commitment = parse_bool(payload.get("acceptCommitment"))
     accepted_terms = parse_bool(payload.get("acceptTerms"))
     note = (payload.get("menuNote") or "").strip()
     menu_link = (payload.get("menuLink") or "").strip()
+    uber_eats_link = (payload.get("uberEatsLink") or "").strip()
+    just_eat_link = (payload.get("justEatLink") or "").strip()
     form = payload.get("form") or {}
 
     required_fields = {
@@ -713,11 +736,15 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
     if kiosk_type not in SUPPORTED_KIOSK_TYPES:
         errors.append("Unsupported kiosk type selected.")
     if sla not in SUPPORTED_SLA:
-        errors.append("Unsupported SLA option selected.")
+        sla = "standard"
     if kiosk_count < 1 or kiosk_count > 10:
         errors.append("Kiosk count must be between 1 and 10.")
-    if pos_count < 1 or pos_count > 10:
-        errors.append("POS count must be between 1 and 10.")
+    if pos_count < 0 or pos_count > 10:
+        errors.append("POS count must be between 0 and 10.")
+    if pos_count == 0 and tablet_count < 1:
+        errors.append("At least one tablet is required when no POS is selected.")
+    if tablet_count < 0 or tablet_count > 10:
+        errors.append("Tablet count must be between 0 and 10.")
     if printer_count < 1 or printer_count > 20:
         errors.append("Printer count must be between 1 and 20.")
     for key, value in required_fields.items():
@@ -728,12 +755,24 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
         errors.append("A valid email address is required.")
     if menu_link and not re.match(r"^https?://", menu_link, flags=re.IGNORECASE):
         errors.append("Menu link must be a valid http or https URL.")
+    if uber_eats_link and not re.match(r"^https?://", uber_eats_link, flags=re.IGNORECASE):
+        errors.append("UberEats link must be a valid http or https URL.")
+    if just_eat_link and not re.match(r"^https?://", just_eat_link, flags=re.IGNORECASE):
+        errors.append("JustEat link must be a valid http or https URL.")
     if require_contract_acceptance and not signature_data.startswith("data:image/png;base64,"):
         errors.append("A digital signature is required.")
     if require_contract_acceptance and (not accepted_commitment or not accepted_terms):
         errors.append("Contract acceptance checkboxes must be confirmed.")
 
-    recurring_total = kiosk_count * PRICING["kiosk"] + pos_count * PRICING["pos"] + (PRICING["sla_premium"] if sla == "premium" else 0)
+    included_printers = kiosk_count + 1
+    extra_printers = max(0, printer_count - included_printers)
+    recurring_total = (
+        kiosk_count * PRICING["kiosk"]
+        + pos_count * PRICING["pos"]
+        + tablet_count * PRICING["tablet"]
+        + extra_printers * PRICING["printer"]
+        + (PRICING["sla_premium"] if sla == "premium" else 0)
+    )
     terminal_count = kiosk_count + 1
     one_time_total = terminal_count * PRICING["terminal"] + (PRICING["ethernet"] if ethernet else 0)
 
@@ -741,6 +780,8 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
         "language": language,
         "kioskType": kiosk_type,
         "kioskCount": kiosk_count,
+        "posCount": pos_count,
+        "tabletCount": tablet_count,
         "printerCount": printer_count,
         "ethernet": ethernet,
         "sla": sla,
@@ -749,6 +790,8 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
         "acceptTerms": accepted_terms,
         "menuNote": note,
         "menuLink": menu_link,
+        "uberEatsLink": uber_eats_link,
+        "justEatLink": just_eat_link,
         "form": {
             "companyName": required_fields["companyName"],
             "companyAddress": required_fields["companyAddress"],
@@ -758,7 +801,6 @@ def validate_payload(payload: dict[str, Any], require_contract_acceptance: bool 
             "emailAddress": required_fields["emailAddress"],
             "phoneNumber": form.get("phoneNumber", "").strip(),
         },
-        "posCount": pos_count,
         "terminalCount": terminal_count,
         "recurringTotal": recurring_total,
         "oneTimeTotal": one_time_total,
@@ -999,8 +1041,9 @@ def render_contract_html(reference: str, payload: dict[str, Any], submission_dir
         "form": payload["form"],
         "kiosk_type": format_kiosk(copy, payload["kioskType"]),
         "kiosk_count": payload["kioskCount"],
-        "printer_count": payload["printerCount"],
         "pos_count": payload["posCount"],
+        "tablet_count": payload.get("tabletCount", 0),
+        "printer_count": payload["printerCount"],
         "terminal_count": payload["terminalCount"],
         "ethernet": format_bool(copy, payload["ethernet"]),
         "sla": format_sla(copy, payload["sla"]),
@@ -1095,6 +1138,7 @@ def build_summary_text(reference: str, payload: dict[str, Any]) -> str:
         Kiosk type: {payload['kioskType']}
         Kiosks: {payload['kioskCount']}
         POS: {payload['posCount']}
+        Tablets: {payload.get('tabletCount', 0)}
         Printers: {payload['printerCount']}
         Terminals: {payload['terminalCount']}
         Ethernet: {"yes" if payload['ethernet'] else "no"}
@@ -1103,6 +1147,8 @@ def build_summary_text(reference: str, payload: dict[str, Any]) -> str:
         One-time total: CHF {payload['oneTimeTotal']}
         Menu link: {payload['menuLink'] or '—'}
         Menu note: {payload['menuNote'] or '—'}
+        UberEats: {payload.get('uberEatsLink') or '—'}
+        JustEat: {payload.get('justEatLink') or '—'}
         """
     ).strip()
 
@@ -1133,6 +1179,11 @@ def build_email_messages(reference: str, payload: dict[str, Any], contract_pdf_p
     customer["Subject"] = f"TapGo onboarding confirmation {reference}"
     customer["From"] = SETTINGS.customer_from_email
     customer["To"] = payload["form"]["emailAddress"]
+    delivery_lines = ""
+    if payload.get("uberEatsLink"):
+        delivery_lines += f"\nUberEats: {payload['uberEatsLink']}"
+    if payload.get("justEatLink"):
+        delivery_lines += f"\nJustEat: {payload['justEatLink']}"
     customer.set_content(
         textwrap.dedent(
             f"""
@@ -1144,7 +1195,7 @@ def build_email_messages(reference: str, payload: dict[str, Any], contract_pdf_p
             Restaurant: {payload['form']['restaurantName']}
             Recurring monthly total: CHF {payload['recurringTotal']}
             One-time Stripe total: CHF {payload['oneTimeTotal']}
-            Menu link: {payload['menuLink'] or '—'}
+            Menu link: {payload['menuLink'] or '—'}{delivery_lines}
 
             A copy of the generated contract is attached to this confirmation.
             """
@@ -1418,10 +1469,11 @@ def persist_submission(
             """
             INSERT INTO submissions (
                 reference, created_at, language, company_name, company_address, restaurant_name, restaurant_address,
-                contact_person, email, phone, kiosk_type, kiosk_count, pos_count, printer_count, terminal_count,
-                ethernet, sla, recurring_total, one_time_total, payment_status, payment_url, payment_provider,
-                contract_pdf_path, contract_html_path, signature_path, menu_note, access_token, form_payload_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                contact_person, email, phone, kiosk_type, kiosk_count, pos_count, tablet_count, printer_count,
+                terminal_count, ethernet, sla, recurring_total, one_time_total, payment_status, payment_url,
+                payment_provider, contract_pdf_path, contract_html_path, signature_path, menu_note,
+                uber_eats_link, just_eat_link, access_token, form_payload_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 reference,
@@ -1437,6 +1489,7 @@ def persist_submission(
                 payload["kioskType"],
                 payload["kioskCount"],
                 payload["posCount"],
+                payload.get("tabletCount", 0),
                 payload["printerCount"],
                 payload["terminalCount"],
                 1 if payload["ethernet"] else 0,
@@ -1450,6 +1503,8 @@ def persist_submission(
                 str(contract_html_path),
                 str(signature_path),
                 payload["menuNote"],
+                payload.get("uberEatsLink") or None,
+                payload.get("justEatLink") or None,
                 access_token,
                 json.dumps(payload, ensure_ascii=False),
             ),
@@ -1458,8 +1513,8 @@ def persist_submission(
             conn.execute(
                 """
                 INSERT INTO submission_files (
-                    submission_reference, original_name, stored_name, stored_path, mime_type, size_bytes, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    submission_reference, original_name, stored_name, stored_path, mime_type, size_bytes, file_category, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     reference,
@@ -1468,6 +1523,7 @@ def persist_submission(
                     item["stored_path"],
                     item["mime_type"],
                     item["size_bytes"],
+                    item.get("file_category", "menu"),
                     utc_now(),
                 ),
             )
@@ -1607,6 +1663,7 @@ def create_submission() -> Any:
         return jsonify({"error": str(exc)}), 400
 
     uploaded_files = request.files.getlist("menu_files")
+    trade_license_files = request.files.getlist("trade_license_files")
     cleaned, errors = validate_payload(payload)
     errors.extend(validate_files(uploaded_files))
     errors.extend(validate_menu_sources(cleaned["menuLink"], uploaded_files))
@@ -1632,6 +1689,23 @@ def create_submission() -> Any:
                 "stored_path": str(target_path),
                 "mime_type": uploaded.mimetype,
                 "size_bytes": target_path.stat().st_size,
+                "file_category": "menu",
+            }
+        )
+        saved_paths.append(target_path)
+    for uploaded in trade_license_files:
+        safe_name = secure_filename(uploaded.filename) or f"trade_license_{uuid.uuid4().hex}"
+        target_name = f"{uuid.uuid4().hex[:8]}_tl_{safe_name}"
+        target_path = submission_dir / target_name
+        uploaded.save(target_path)
+        stored_files.append(
+            {
+                "original_name": uploaded.filename,
+                "stored_name": target_name,
+                "stored_path": str(target_path),
+                "mime_type": uploaded.mimetype,
+                "size_bytes": target_path.stat().st_size,
+                "file_category": "trade_license",
             }
         )
         saved_paths.append(target_path)
