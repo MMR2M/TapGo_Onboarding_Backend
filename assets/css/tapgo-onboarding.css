@@ -1108,7 +1108,8 @@ a {
 }
 
 .upload-dropzone input,
-#menuUpload {
+#menuUpload,
+#tradeLicenseUpload {
   display: none;
 }
 
