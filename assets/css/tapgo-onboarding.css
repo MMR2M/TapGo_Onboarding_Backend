@@ -572,6 +572,64 @@ a {
   font-size: 1.8rem;
 }
 
+/* Image-style kiosk cards */
+.option-card--image {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  height: 260px;
+  border-radius: 20px;
+  display: block;
+}
+
+.option-card--image .option-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.option-card--image:hover .option-card__img,
+.option-card--image.is-selected .option-card__img {
+  transform: scale(1.04);
+}
+
+.option-card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 16px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 60%, transparent 100%);
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+
+.option-card--image .option-card__title {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.option-card--image .option-card__text {
+  color: rgba(255,255,255,0.82);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.option-card--image.is-selected {
+  outline: 3px solid rgba(190, 27, 76, 0.9);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(190, 27, 76, 0.15);
+  background: none;
+}
+
+.option-card--image.is-selected .option-card__overlay {
+  background: linear-gradient(to top, rgba(190,27,76,0.75) 0%, rgba(0,0,0,0.35) 70%, transparent 100%);
+}
+
 .option-card__title,
 .feature-card h3,
 .info-tile h3,

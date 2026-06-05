@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/tapgo-onboarding.css?v=7">
+  <link rel="stylesheet" href="/assets/css/tapgo-onboarding.css?v=8">
 </head>
 <body>
   <div class="site-bg" aria-hidden="true">
@@ -99,20 +99,26 @@
 
         <div class="section-label" data-i18n="page1.kioskLabel">Kiosk style</div>
         <div class="option-grid">
-          <button class="option-card" type="button" data-kiosk-type="standing">
-            <span class="option-card__emoji">🧍</span>
-            <span class="option-card__title" data-i18n="page1.kiosks.standing.title">Standing kiosk</span>
-            <span class="option-card__text" data-i18n="page1.kiosks.standing.text">Best for heavy footfall and clear front-of-house ordering lanes.</span>
+          <button class="option-card option-card--image" type="button" data-kiosk-type="standing">
+            <img class="option-card__img" src="/assets/images/kiosk-standing.jpeg" alt="Standing kiosk">
+            <div class="option-card__overlay">
+              <span class="option-card__title" data-i18n="page1.kiosks.standing.title">Standing kiosk</span>
+              <span class="option-card__text" data-i18n="page1.kiosks.standing.text">Best for heavy footfall and clear front-of-house ordering lanes.</span>
+            </div>
           </button>
-          <button class="option-card" type="button" data-kiosk-type="wall">
-            <span class="option-card__emoji">🧱</span>
-            <span class="option-card__title" data-i18n="page1.kiosks.wall.title">Wall kiosk</span>
-            <span class="option-card__text" data-i18n="page1.kiosks.wall.text">Low-footprint format for tighter service areas or narrow entrances.</span>
+          <button class="option-card option-card--image" type="button" data-kiosk-type="wall">
+            <img class="option-card__img" src="/assets/images/kiosk-wall.jpeg" alt="Wall kiosk">
+            <div class="option-card__overlay">
+              <span class="option-card__title" data-i18n="page1.kiosks.wall.title">Wall kiosk</span>
+              <span class="option-card__text" data-i18n="page1.kiosks.wall.text">Low-footprint format for tighter service areas or narrow entrances.</span>
+            </div>
           </button>
-          <button class="option-card" type="button" data-kiosk-type="tabletop">
-            <span class="option-card__emoji">☕</span>
-            <span class="option-card__title" data-i18n="page1.kiosks.tabletop.title">Countertop kiosk</span>
-            <span class="option-card__text" data-i18n="page1.kiosks.tabletop.text">Compact setup for counters, cafés, and limited-width checkout zones.</span>
+          <button class="option-card option-card--image" type="button" data-kiosk-type="tabletop">
+            <img class="option-card__img" src="/assets/images/kiosk-counter.jpeg" alt="Countertop kiosk">
+            <div class="option-card__overlay">
+              <span class="option-card__title" data-i18n="page1.kiosks.tabletop.title">Countertop kiosk</span>
+              <span class="option-card__text" data-i18n="page1.kiosks.tabletop.text">Compact setup for counters, cafés, and limited-width checkout zones.</span>
+            </div>
           </button>
         </div>
 
