@@ -1601,7 +1601,8 @@ def health() -> Any:
 @app.route("/api/integrations/health")
 def integrations_health() -> Any:
     if SETTINGS.production:
-        supplied_token = request.headers.get("Authorization", "").removeprefix("Bearer ").strip()
+        auth_header = request.headers.get("Authorization", "")
+        supplied_token = (auth_header[7:] if auth_header.startswith("Bearer ") else auth_header).strip()
         if not SETTINGS.health_token or not hmac.compare_digest(SETTINGS.health_token, supplied_token):
             abort(404)
     imap_ok, imap_message = check_imap_connection()
